@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-18T21:01:07.670Z",
+  "checkedAt": "2026-11-18T21:05:43.682Z",
   "commit": "5bd87dfc525c8a0d1d8529d3684716e00c3fc59a",
   "families": 1993,
   "stylesChecked": 3693,
@@ -183,6 +183,52 @@
       "branch": "main",
       "file": "LICENSE",
       "firstLine": "MIT License"
+    }
+  ],
+  "knownLimitations": [
+    {
+      "id": "css2-preview-http-400",
+      "count": 37,
+      "families": [
+        "Alumni Sans Collegiate One SC",
+        "Batang",
+        "BatangChe",
+        "Betania Patmos Guide Line",
+        "Bhavuka",
+        "Big Shoulders Display SC",
+        "Big Shoulders Inline Display SC",
+        "Big Shoulders Inline Text SC",
+        "Big Shoulders Stencil Display SC",
+        "Big Shoulders Stencil Text SC",
+        "Big Shoulders Text SC",
+        "Bungee Color",
+        "Digital Numbers",
+        "DotumChe",
+        "Fragment Mono SC",
+        "Geist Serif",
+        "GulimChe",
+        "Gungsuh",
+        "GungsuhChe",
+        "Hermeneus One",
+        "Hind Colombo",
+        "Hind Jalandhar",
+        "Hind Kochi",
+        "Madhuban",
+        "Merge One",
+        "Mervale Script",
+        "Miama",
+        "NATS",
+        "Nevermind",
+        "Noto Color Emoji Compat Test",
+        "Porter Sans Block",
+        "Signika Negative SC",
+        "Signika SC",
+        "Sitara",
+        "Strong",
+        "Yaldevi Colombo",
+        "Yinmar"
+      ],
+      "note": "Google css2 API returns HTTP 400 for the preview request of these families, so they are excluded from the library. Kept as a known limitation."
     }
   ]
 }

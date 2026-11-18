@@ -4,6 +4,9 @@ import type { CategoryEvidence, CategoryId } from "../../src/lib/types";
 export interface TagRow { family: string; axes: string; tag: string; score: number }
 
 export const MIN_TAG_SCORE = 50;
+// /Expressive/Vintage matches ~1800 families at score 50, so retro needs a stricter score.
+export const RETRO_TAG = "/Expressive/Vintage";
+export const RETRO_TAG_MIN_SCORE = 80;
 const DROPPED_PREFIXES = ["/Quality", "/quant", "/Fontquant", "/Skip"];
 
 // RFC 4180-style CSV: quoted fields may contain commas, doubled quotes and newlines.
@@ -85,12 +88,16 @@ const TAG_CATEGORY: Record<string, CategoryId> = {
   "/Theme/Woodtype": "decorative",
 };
 
-// Category evidence from kept tags only (score >= 50). detail: '/Theme/Pixel=100'.
+// Category evidence from tags: score >= 50 in general, >= 80 for /Expressive/Vintage (retro).
+// detail: '/Theme/Pixel=100'.
 export function categoriesFromTags(tags: Map<string, number>): CategoryEvidence[] {
   const out: CategoryEvidence[] = [];
   for (const tag of keptTags(tags)) {
     const category = TAG_CATEGORY[tag];
-    if (category) out.push({ category, source: "tag", detail: `${tag}=${tags.get(tag)}` });
+    if (!category) continue;
+    const min = tag === RETRO_TAG ? RETRO_TAG_MIN_SCORE : MIN_TAG_SCORE;
+    const score = tags.get(tag) ?? 0;
+    if (score >= min) out.push({ category, source: "tag", detail: `${tag}=${score}` });
   }
   return out;
 }

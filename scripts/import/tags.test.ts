@@ -48,7 +48,7 @@ describe("familyTagRows / keptTags", () => {
 describe("categoriesFromTags", () => {
   it("maps the contract tags to categories with score evidence", () => {
     const tags = new Map([
-      ["/Expressive/Vintage", 60],
+      ["/Expressive/Vintage", 80],
       ["/Theme/Blackletter", 50],
       ["/Theme/Pixel", 100],
       ["/Theme/Tuscan", 70],
@@ -64,11 +64,23 @@ describe("categoriesFromTags", () => {
     const cats = new Set(ev.map((e) => e.category));
     expect(cats).toEqual(new Set(["retro", "gothic", "pixel", "decorative"]));
     expect(ev).toContainEqual({ category: "pixel", source: "tag", detail: "/Theme/Pixel=100" });
-    expect(ev).toContainEqual({ category: "retro", source: "tag", detail: "/Expressive/Vintage=60" });
+    expect(ev).toContainEqual({ category: "retro", source: "tag", detail: "/Expressive/Vintage=80" });
     expect(ev).toContainEqual({ category: "gothic", source: "tag", detail: "/Theme/Blackletter=50" });
   });
 
   it("ignores tags below score 50", () => {
     expect(categoriesFromTags(new Map([["/Theme/Pixel", 49]]))).toEqual([]);
+  });
+
+  it("requires score >= 80 for retro (/Expressive/Vintage)", () => {
+    expect(categoriesFromTags(new Map([["/Expressive/Vintage", 79]]))).toEqual([]);
+    expect(categoriesFromTags(new Map([["/Expressive/Vintage", 50]]))).toEqual([]);
+    expect(categoriesFromTags(new Map([["/Expressive/Vintage", 80]]))).toEqual([
+      { category: "retro", source: "tag", detail: "/Expressive/Vintage=80" },
+    ]);
+  });
+
+  it("keeps /Expressive/Vintage as a human tag at score 50 even though it is not retro", () => {
+    expect(keptTags(new Map([["/Expressive/Vintage", 50]]))).toEqual(["/Expressive/Vintage"]);
   });
 });

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-18T21:01:09.690Z",
+  "generatedAt": "2026-11-18T21:05:45.465Z",
   "commit": "5bd87dfc525c8a0d1d8529d3684716e00c3fc59a",
   "totals": {
     "families": 1993,
@@ -15,7 +15,7 @@
       "handwriting": 353,
       "display": 500,
       "monospace": 52,
-      "retro": 665,
+      "retro": 173,
       "gothic": 20,
       "pixel": 43,
       "decorative": 55
@@ -252,7 +252,23 @@
   "upstreams": [
     {
       "repo": "IBM/plex",
-      "coveredBy": [],
+      "aliases": [
+        "googlefonts/plex"
+      ],
+      "note": "googlefonts/plex is the Google Fonts fork of IBM/plex; its families count as coverage for IBM/plex. Attribution stays google/fonts with the real upstream URL.",
+      "coveredBy": [
+        "IBM Plex Mono",
+        "IBM Plex Sans",
+        "IBM Plex Sans Arabic",
+        "IBM Plex Sans Condensed",
+        "IBM Plex Sans Devanagari",
+        "IBM Plex Sans Hebrew",
+        "IBM Plex Sans JP",
+        "IBM Plex Sans KR",
+        "IBM Plex Sans Thai",
+        "IBM Plex Sans Thai Looped",
+        "IBM Plex Serif"
+      ],
       "licenseCheck": {
         "file": "LICENSE.txt",
         "branch": "master",
@@ -294,6 +310,8 @@
     },
     {
       "repo": "fontsource/fontsource",
+      "role": "dedupe-only",
+      "note": "Mirror of Google Fonts. Dedupe-only: nothing is imported from it.",
       "coveredBy": [],
       "licenseCheck": {
         "file": "LICENSE",
@@ -301,5 +319,11 @@
         "firstLine": "MIT License"
       }
     }
+  ],
+  "notes": [
+    "Category tags: /Expressive/Vintage maps to retro only at score >= 80; other category tags need score >= 50 (see tags.ts).",
+    "IBM/plex coverage also counts googlefonts/plex, the Google Fonts fork of IBM/plex (see sources.json aliases).",
+    "fontsource/fontsource is a dedupe-only mirror of Google Fonts: nothing is imported from it.",
+    "Variable fonts: weights span every standard weight inside the wght axis; styles remain the real files; styleCount = weights x (normal+italic)."
   ]
 }

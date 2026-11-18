@@ -5,7 +5,7 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { cssUrl } from "../../src/lib/google-css";
 import type { FontFamily } from "../../src/lib/types";
-import { previewFor } from "./build";
+import { previewFor } from "./weights";
 
 const ROOT = path.resolve(__dirname, "../..");
 const DATA_DIR = path.join(ROOT, "data");
@@ -88,7 +88,7 @@ async function main(): Promise<void> {
   const tasks: Task[] = [];
   let stylesChecked = 0;
   for (const f of families) {
-    const preview = previewFor(f.styles);
+    const preview = previewFor(f);
     tasks.push({
       family: f.family,
       run: async () => {
@@ -153,6 +153,15 @@ async function main(): Promise<void> {
 
   const upstreamLicenses = await pool(SOURCES.upstreams.map((u) => u.repo), CONCURRENCY, checkUpstream);
 
+  const css400 = failedFamilies.filter((f) => f.reason.includes("css2 preview HTTP 400")).map((f) => f.family);
+  const knownLimitations = css400.length
+    ? [{
+        id: "css2-preview-http-400",
+        count: css400.length,
+        families: css400,
+        note: "Google css2 API returns HTTP 400 for the preview request of these families, so they are excluded from the library. Kept as a known limitation.",
+      }]
+    : [];
   const report = {
     checkedAt: new Date().toISOString(),
     commit: SHA,
@@ -160,6 +169,7 @@ async function main(): Promise<void> {
     stylesChecked,
     failedFamilies,
     upstreamLicenses,
+    knownLimitations,
   };
   writeFileSync(path.join(DATA_DIR, "verify-report.json"), JSON.stringify(report, null, 2) + "\n");
   console.log(`VERIFY: families=${families.length} styles=${stylesChecked} failed=${failedFamilies.length}`);

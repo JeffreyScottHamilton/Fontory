@@ -3,13 +3,14 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseMetadata, type Metadata } from "./parse-metadata";
-import { categoriesFromTags, familyTagRows, keptTags, parseFamiliesCsv } from "./tags";
+import { categoriesFromTags, familyTagRows, keptTags, parseFamiliesCsv, RETRO_TAG, RETRO_TAG_MIN_SCORE } from "./tags";
+import { familyWeights, previewFor, styleCountFor } from "./weights";
 import { CATEGORIES, type CategoryEvidence, type CategoryId, type FontFamily, type FontIndexEntry, type FontStyle } from "../../src/lib/types";
 
 const ROOT = path.resolve(__dirname, "../..");
 const SOURCES = JSON.parse(readFileSync(path.join(__dirname, "sources.json"), "utf8")) as {
   googleFonts: { repo: string; commit: string };
-  upstreams: { repo: string }[];
+  upstreams: { repo: string; aliases?: string[]; role?: string; note?: string }[];
 };
 const SHA = SOURCES.googleFonts.commit;
 const RAW_BASE = `https://raw.githubusercontent.com/google/fonts/${SHA}`;
@@ -31,22 +32,19 @@ const METADATA_CATEGORY: Record<string, CategoryId> = {
   MONOSPACE: "monospace",
 };
 
+const REPORT_NOTES = [
+  `Category tags: ${RETRO_TAG} maps to retro only at score >= ${RETRO_TAG_MIN_SCORE}; other category tags need score >= 50 (see tags.ts).`,
+  "IBM/plex coverage also counts googlefonts/plex, the Google Fonts fork of IBM/plex (see sources.json aliases).",
+  "fontsource/fontsource is a dedupe-only mirror of Google Fonts: nothing is imported from it.",
+  "Variable fonts: weights span every standard weight inside the wght axis; styles remain the real files; styleCount = weights x (normal+italic).",
+];
+
 export interface Excluded { repoPath: string; reason: string }
 export interface Duplicate { repoPath: string; family: string; slug: string; keptRepoPath: string; reason: string }
 export type LicenseCheck = { file: string; branch: string; firstLine: string } | { error: string } | null;
 
 export function slugify(family: string): string {
   return family.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-}
-
-// Preferred preview: normal 400; else normal closest to 400; else italic closest to 400 (ties: lighter).
-export function previewFor(styles: Pick<FontStyle, "style" | "weight">[]): { previewWeight: number; previewStyle: "normal" | "italic" } {
-  const closest = (list: Pick<FontStyle, "weight">[]) =>
-    [...list].sort((a, b) => Math.abs(a.weight - 400) - Math.abs(b.weight - 400) || a.weight - b.weight)[0];
-  const normals = styles.filter((s) => s.style === "normal");
-  if (normals.length) return { previewWeight: closest(normals).weight, previewStyle: "normal" };
-  const italics = styles.filter((s) => s.style === "italic");
-  return { previewWeight: closest(italics).weight, previewStyle: "italic" };
 }
 
 // Normalises an upstream URL to lowercase "owner/repo" (tolerates www., .git, trailing slashes).
@@ -137,7 +135,7 @@ export function buildFamily(
   categoryEvidence.push(...categoriesFromTags(tagMap));
   const categories = categoryOrder(categoryEvidence.map((e) => e.category));
 
-  const weights = [...new Set(styles.map((s) => s.weight))].sort((a, b) => a - b);
+  const weights = familyWeights(axes, styles);
   const srcBlock = meta.source;
   const upstream = srcBlock?.repositoryUrl
     ? { repositoryUrl: srcBlock.repositoryUrl, ...(srcBlock.commit ? { commit: srcBlock.commit } : {}) }
@@ -279,7 +277,7 @@ function main(): void {
   duplicates.sort((a, b) => sortStr(a.repoPath, b.repoPath));
 
   const index: FontIndexEntry[] = kept.map((f) => {
-    const preview = previewFor(f.styles);
+    const preview = previewFor(f);
     return {
       slug: f.slug,
       family: f.family,
@@ -288,7 +286,7 @@ function main(): void {
       weights: f.weights,
       hasItalic: f.hasItalic,
       isVariable: f.isVariable,
-      styleCount: f.styles.length,
+      styleCount: styleCountFor(f),
       dateAdded: f.dateAdded,
       previewWeight: preview.previewWeight,
       previewStyle: preview.previewStyle,
@@ -298,11 +296,19 @@ function main(): void {
   // Upstream coverage and license checks.
   const upstreams = SOURCES.upstreams.map((u) => {
     const key = u.repo.toLowerCase();
-    const coveredBy = kept.filter((f) => f.upstream && normalizeRepo(f.upstream.repositoryUrl) === key).map((f) => f.family);
+    const keys = new Set([key, ...(u.aliases ?? []).map((a) => a.toLowerCase())]);
+    const coveredBy = kept.filter((f) => f.upstream && keys.has(normalizeRepo(f.upstream.repositoryUrl))).map((f) => f.family);
     const vl = verify?.upstreamLicenses.find((l) => l.repo.toLowerCase() === key);
     let licenseCheck: LicenseCheck = null;
     if (vl) licenseCheck = vl.file && vl.branch && vl.firstLine !== null ? { file: vl.file, branch: vl.branch, firstLine: vl.firstLine } : { error: "no license file found on main or master" };
-    return { repo: u.repo, coveredBy, licenseCheck };
+    return {
+      repo: u.repo,
+      ...(u.role ? { role: u.role } : {}),
+      ...(u.aliases ? { aliases: u.aliases } : {}),
+      ...(u.note ? { note: u.note } : {}),
+      coveredBy,
+      licenseCheck,
+    };
   });
 
   const byLicense: Record<string, number> = {};
@@ -322,6 +328,7 @@ function main(): void {
     excluded,
     duplicates,
     upstreams,
+    notes: REPORT_NOTES,
   };
 
   mkdirSync(DATA_DIR, { recursive: true });

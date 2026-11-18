@@ -4,10 +4,19 @@
     "commit": "5bd87dfc525c8a0d1d8529d3684716e00c3fc59a"
   },
   "upstreams": [
-    { "repo": "IBM/plex" },
+    {
+      "repo": "IBM/plex",
+      "aliases": ["googlefonts/plex"],
+      "note": "googlefonts/plex is the Google Fonts fork of IBM/plex; its families count as coverage for IBM/plex. Attribution stays google/fonts with the real upstream URL."
+    },
     { "repo": "rsms/inter" },
     { "repo": "tonsky/FiraCode" },
     { "repo": "JetBrains/JetBrainsMono" },
-    { "repo": "fontsource/fontsource" }
+    {
+      "repo": "fontsource/fontsource",
+      "role": "dedupe-only",
+      "mirrorOf": "google/fonts",
+      "note": "Mirror of Google Fonts. Dedupe-only: nothing is imported from it."
+    }
   ]
 }
