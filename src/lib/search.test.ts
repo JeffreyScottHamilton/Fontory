@@ -14,6 +14,8 @@ function entry(over: Partial<FontIndexEntry> & { family: string }): FontIndexEnt
     dateAdded: "2020-01-01",
     previewWeight: 400,
     previewStyle: "normal",
+    preview: "css2",
+    collection: "google-fonts",
     ...over,
   };
 }

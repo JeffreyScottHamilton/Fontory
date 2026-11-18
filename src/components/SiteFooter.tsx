@@ -1,21 +1,35 @@
 import Link from "next/link";
-import importReport from "../../data/import-report.json";
-import { CATEGORIES } from "@/lib/types";
+import { getAllFamilies } from "@/lib/data";
+import { CATEGORIES, COLLECTIONS, type CollectionId } from "@/lib/types";
 
-// Colophon. Server-rendered from the import report, so the counts and the pinned snapshot are real.
-
-const LICENSE_LABEL: Record<string, string> = {
-  OFL: "SIL Open Font License 1.1",
-  APACHE2: "Apache License 2.0",
-  UFL: "Ubuntu Font Licence 1.0",
-};
+// Colophon. Computed from the family records, so counts, licenses and pinned snapshots match the data.
 
 const LABEL = "label-mono";
+const COLLECTION_ORDER: CollectionId[] = ["google-fonts", "league", "velvetyne", "fontsource"];
+
+function joinNames(names: string[]): string {
+  if (names.length <= 1) return names.join("");
+  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+}
 
 export default function SiteFooter() {
-  const { commit, totals } = importReport;
-  const shortSha = commit.slice(0, 7);
-  const licenses = Object.entries(totals.byLicense) as [string, number][];
+  const families = getAllFamilies();
+  const styleCount = families.reduce((n, f) => n + f.styles.length, 0);
+
+  const byLicense = new Map<string, { name: string; count: number }>();
+  for (const f of families) {
+    const entry = byLicense.get(f.license) ?? { name: f.licenseName, count: 0 };
+    entry.count += 1;
+    byLicense.set(f.license, entry);
+  }
+  const licenses = [...byLicense.values()].sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+
+  const collections = COLLECTION_ORDER.map((id) => {
+    const members = families.filter((f) => f.collection === id);
+    return { id, count: members.length, commit: members[0]?.source.commit };
+  }).filter((c) => c.count > 0);
+
+  const attribution = joinNames(collections.map((c) => COLLECTIONS[c.id].name));
 
   return (
     <footer className="mt-auto border-t border-rule">
@@ -26,9 +40,9 @@ export default function SiteFooter() {
               About
             </h2>
             <p className="max-w-[44ch] text-sm leading-relaxed text-ink">
-              Fontory is an independent catalogue of {totals.families.toLocaleString("en-US")} font families
-              and {totals.styles.toLocaleString("en-US")} styles from the Google Fonts collection. Every file
-              is served from the pinned snapshot, unchanged.
+              Fontory is an independent catalogue of {families.length.toLocaleString("en-US")} font families and{" "}
+              {styleCount.toLocaleString("en-US")} styles from {attribution}. Every file is served from its pinned
+              source snapshot, unchanged.
             </p>
           </section>
 
@@ -37,24 +51,28 @@ export default function SiteFooter() {
               Source &amp; licenses
             </h2>
             <ul className="flex flex-col divide-y divide-rule border-y border-rule text-sm">
-              {licenses.map(([id, count]) => (
-                <li key={id} className="flex items-baseline justify-between gap-4 py-2">
-                  <span className="text-ink">{LICENSE_LABEL[id] ?? id}</span>
+              {licenses.map((l) => (
+                <li key={l.name} className="flex items-baseline justify-between gap-4 py-2">
+                  <span className="text-ink">{l.name}</span>
                   <span className="font-mono text-[12px] tabular-nums text-muted">
-                    {count.toLocaleString("en-US")}
+                    {l.count.toLocaleString("en-US")}
                   </span>
                 </li>
               ))}
             </ul>
-            <p className="text-sm text-muted">
-              <Link
-                href="https://github.com/google/fonts"
-                className="text-ink underline underline-offset-4 hover:text-accent"
-              >
-                github.com/google/fonts
-              </Link>
-              <span className="font-mono text-[12px]"> · snapshot {shortSha}</span>
-            </p>
+            <ul className="flex flex-col gap-2 text-sm text-muted">
+              {collections.map((c) => (
+                <li key={c.id}>
+                  <Link
+                    href={COLLECTIONS[c.id].href}
+                    className="text-ink underline underline-offset-4 hover:text-accent"
+                  >
+                    {COLLECTIONS[c.id].repoLabel}
+                  </Link>
+                  {c.commit && <span className="font-mono text-[12px]"> · snapshot {c.commit.slice(0, 7)}</span>}
+                </li>
+              ))}
+            </ul>
           </section>
 
           <section aria-labelledby="footer-colophon" className="flex flex-col gap-4 md:col-span-3">

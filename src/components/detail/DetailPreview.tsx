@@ -4,17 +4,23 @@ import { useId, type CSSProperties } from "react";
 import { StyleDownloadLink } from "@/components/DownloadButton";
 import DetailSection from "@/components/detail/DetailSection";
 import { styleTag, weightTag } from "@/components/detail/format";
-import { cssUrl } from "@/lib/google-css";
+import { previewHref } from "@/lib/preview-css";
 import { DEFAULT_SAMPLE, MAX_SIZE, MIN_SIZE, usePreview } from "@/lib/preview";
 import type { FontStyle } from "@/lib/types";
-import { useFontReady, useFontStylesheet, type FontReadyStatus, type StylesheetStatus } from "@/lib/useFontStylesheet";
+import {
+  useFontReady,
+  useFontStylesheet,
+  type FontReadyStatus,
+  type ReadyFont,
+  type StylesheetStatus,
+} from "@/lib/useFontStylesheet";
 
 const ROW_MAX_SIZE = 40;
 const WEIGHT_SAMPLE_SIZE = 40;
 const WATERFALL_SIZES = [12, 16, 24, 36, 48, 72, 96];
 
 interface DetailPreviewProps {
-  family: string;
+  font: ReadyFont;
   styles: FontStyle[];
   /** Standard weights of the family (weights list from the data). */
   weights: number[];
@@ -63,20 +69,21 @@ function SampleLine({
 }
 
 function StyleRow({
-  family,
+  font,
   style,
   text,
   size,
   sheet,
 }: {
-  family: string;
+  font: ReadyFont;
   style: FontStyle;
   text: string;
   size: number;
   sheet: StylesheetStatus;
 }) {
   // The combined stylesheet already carries every face, so no per-style link is injected.
-  const status = useFontReady(family, style.weight, style.style, true, { sheet });
+  const { family } = font;
+  const status = useFontReady(font, style.weight, style.style, true, { sheet });
   return (
     <li className="grid gap-3 border-t border-rule py-5 md:grid-cols-[9rem_minmax(0,1fr)_auto] md:items-center md:gap-6">
       <span className="label-mono tabular-nums">{styleTag(style)}</span>
@@ -102,7 +109,7 @@ function StyleRow({
 }
 
 export default function DetailPreview({
-  family,
+  font,
   styles,
   weights,
   previewWeight,
@@ -110,13 +117,14 @@ export default function DetailPreview({
   variableLabel,
   weightsText,
 }: DetailPreviewProps) {
+  const { family } = font;
   const [state, setText, setSize] = usePreview();
   const textId = useId();
   const sizeId = useId();
 
   // Loads every style of the family in one stylesheet.
-  const sheet = useFontStylesheet(cssUrl(family, styles));
-  const heroStatus = useFontReady(family, previewWeight, previewStyle, true, { sheet });
+  const sheet = useFontStylesheet(previewHref(font, styles));
+  const heroStatus = useFontReady(font, previewWeight, previewStyle, true, { sheet });
 
   const text = state.text.trim() === "" ? DEFAULT_SAMPLE : state.text;
   const rowSize = Math.min(state.size, ROW_MAX_SIZE);
@@ -207,7 +215,7 @@ export default function DetailPreview({
           {styles.map((style) => (
             <StyleRow
               key={`${style.style}-${style.weight}-${style.filename}`}
-              family={family}
+              font={font}
               style={style}
               text={text}
               size={rowSize}

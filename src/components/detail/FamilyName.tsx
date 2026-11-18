@@ -1,11 +1,11 @@
 "use client";
 
-import { cssUrl } from "@/lib/google-css";
+import { previewHref } from "@/lib/preview-css";
 import type { FontStyle } from "@/lib/types";
-import { useFontReady, useFontStylesheet } from "@/lib/useFontStylesheet";
+import { useFontReady, useFontStylesheet, type ReadyFont } from "@/lib/useFontStylesheet";
 
 interface FamilyNameProps {
-  family: string;
+  font: ReadyFont;
   styles: FontStyle[];
   weight: number;
   style: "normal" | "italic";
@@ -16,9 +16,10 @@ interface FamilyNameProps {
  * so the page never shows a system fallback as a specimen. The sheet is the same href
  * DetailPreview uses, so the stylesheet is injected only once.
  */
-export default function FamilyName({ family, styles, weight, style }: FamilyNameProps) {
-  const sheet = useFontStylesheet(cssUrl(family, styles));
-  const status = useFontReady(family, weight, style, true, { sheet });
+export default function FamilyName({ font, styles, weight, style }: FamilyNameProps) {
+  const { family } = font;
+  const sheet = useFontStylesheet(previewHref(font, styles));
+  const status = useFontReady(font, weight, style, true, { sheet });
 
   if (status === "error") {
     return (

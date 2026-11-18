@@ -14,7 +14,8 @@ import { categoryLabel, variableWeightLabel, weightsText } from "@/components/de
 import { getFamily, getIndex, toIndexEntry } from "@/lib/data";
 import { cssSnippet } from "@/lib/google-css";
 import { PRERENDER_SLUGS } from "@/lib/prerender";
-import type { FontIndexEntry } from "@/lib/types";
+import { webSnippetBlocks } from "@/lib/preview-css";
+import { COLLECTIONS, type FontIndexEntry } from "@/lib/types";
 
 // Only PRERENDER_SLUGS are prerendered at build time (see src/lib/prerender.ts).
 // Other slugs render on first request and are cached indefinitely (revalidate = false).
@@ -71,7 +72,7 @@ export default async function FontDetailPage({ params }: PageProps) {
   if (!f) notFound();
 
   const preview = toIndexEntry(f);
-  const snippet = cssSnippet(f);
+  const snippet = webSnippetBlocks(f, cssSnippet(f));
   const bySlug = new Map<string, FontIndexEntry>(getIndex().map((e) => [e.slug, e]));
   const related = f.related
     .slice(0, 6)
@@ -82,7 +83,8 @@ export default async function FontDetailPage({ params }: PageProps) {
   const meta = [
     styleCount,
     f.isVariable ? "Variable" : null,
-    ...f.categories.map(categoryLabel),
+    ...(f.categories.length > 0 ? f.categories.map(categoryLabel) : ["Uncategorized"]),
+    COLLECTIONS[f.collection].name,
     f.licenseName,
   ].filter((m): m is string => Boolean(m));
 
@@ -104,7 +106,7 @@ export default async function FontDetailPage({ params }: PageProps) {
         </nav>
 
         <div className="flex min-w-0 flex-col gap-5">
-          <FamilyName family={f.family} styles={f.styles} weight={preview.previewWeight} style={preview.previewStyle} />
+          <FamilyName font={f} styles={f.styles} weight={preview.previewWeight} style={preview.previewStyle} />
           <div className="flex flex-col gap-2">
             <p className="text-lg text-ink">by {f.designer}</p>
             <p className="label-mono tabular-nums">{meta.join(" · ")}</p>
@@ -128,7 +130,7 @@ export default async function FontDetailPage({ params }: PageProps) {
       </header>
 
       <DetailPreview
-        family={f.family}
+        font={f}
         styles={f.styles}
         weights={f.weights}
         previewWeight={preview.previewWeight}
@@ -138,18 +140,14 @@ export default async function FontDetailPage({ params }: PageProps) {
       />
 
       <CharacterSet
-        family={f.family}
+        font={f}
         subsets={f.subsets}
         weight={preview.previewWeight}
         style={preview.previewStyle}
         styles={f.styles}
       />
 
-      <UseOnWeb
-        linkTag={snippet.linkTag}
-        importLine={snippet.importLine}
-        fontFamilyLine={snippet.fontFamilyLine}
-      />
+      <UseOnWeb blocks={snippet} />
 
       <InfoPanel font={f} />
 

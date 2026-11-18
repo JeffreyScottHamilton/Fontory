@@ -2,12 +2,12 @@
 
 import { useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { codePointLabel, type GlyphRow } from "@/components/detail/format";
-import { cssUrl } from "@/lib/google-css";
+import { previewHref } from "@/lib/preview-css";
 import type { FontStyle } from "@/lib/types";
-import { useFontReady, useFontStylesheet } from "@/lib/useFontStylesheet";
+import { useFontReady, useFontStylesheet, type ReadyFont } from "@/lib/useFontStylesheet";
 
 interface GlyphGridProps {
-  family: string;
+  font: ReadyFont;
   weight: number;
   style: "normal" | "italic";
   rows: GlyphRow[];
@@ -20,10 +20,11 @@ interface GlyphGridProps {
  * inspector. The grid is one tab stop (roving tabindex on the selected glyph); the arrow keys,
  * Home and End move between glyphs. Glyph text stays hidden until the face is ready.
  */
-export default function GlyphGrid({ family, weight, style, rows, styles }: GlyphGridProps) {
+export default function GlyphGrid({ font, weight, style, rows, styles }: GlyphGridProps) {
+  const { family } = font;
   // Same href as DetailPreview and FamilyName, so the stylesheet is injected once. Without styles, the hook falls back to its own per-face sheet.
-  const sheet = useFontStylesheet(styles ? cssUrl(family, styles) : null);
-  const status = useFontReady(family, weight, style, true, styles ? { sheet } : undefined);
+  const sheet = useFontStylesheet(styles ? previewHref(font, styles) : null);
+  const status = useFontReady(font, weight, style, true, styles ? { sheet } : undefined);
   const visibility = status === "ready" ? "visible" : "hidden";
   const [selected, setSelected] = useState(() => rows[0]?.glyphs[0] ?? "");
   const face = { fontFamily: `'${family}', system-ui`, fontWeight: weight, fontStyle: style };

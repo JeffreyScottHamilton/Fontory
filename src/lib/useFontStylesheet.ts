@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
-import { cssUrl } from "@/lib/google-css";
+import { previewHref } from "@/lib/preview-css";
+import type { PreviewMode } from "@/lib/types";
 
 export type StylesheetStatus = "idle" | "loading" | "ready" | "error";
 
@@ -71,6 +72,13 @@ export type FontReadyStatus = "loading" | "ready" | "error";
 
 export const FONT_READY_TIMEOUT_MS = 15000;
 
+/** The family fields useFontReady needs: how to load its face and what name to match. */
+export interface ReadyFont {
+  slug: string;
+  family: string;
+  preview: PreviewMode;
+}
+
 export interface FontReadyOptions {
   /**
    * Status of a stylesheet the caller already loads (for example a combined css2 sheet
@@ -80,20 +88,22 @@ export interface FontReadyOptions {
 }
 
 /**
- * Reports whether the single family/weight/style face is usable.
+ * Reports whether the single font/weight/style face is usable. A css2 family gets its own
+ * per-face css2 link; a fontface family loads the self-hosted sheet for its slug.
  * - 'loading' while disabled, while the stylesheet loads, or while document.fonts.load runs
  * - 'ready' once document.fonts.load resolves with a face and document.fonts.check passes
  * - 'error' on stylesheet error, load rejection, no matching face, or after FONT_READY_TIMEOUT_MS
  */
 export function useFontReady(
-  family: string,
+  font: ReadyFont,
   weight: number,
   style: "normal" | "italic",
   enabled: boolean,
   options?: FontReadyOptions,
 ): FontReadyStatus {
+  const { family } = font;
   const external = options?.sheet !== undefined;
-  const href = enabled && !external ? cssUrl(family, [{ weight, style }]) : null;
+  const href = enabled && !external ? previewHref(font, [{ weight, style }]) : null;
   const ownSheet = useFontStylesheet(href);
   const sheet = options?.sheet ?? ownSheet;
   const key = enabled ? `${family}|${weight}|${style}` : null;

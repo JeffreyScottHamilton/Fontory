@@ -43,7 +43,7 @@ export default function FavoriteRow({ font, text, size, onRemove }: FavoriteRowP
     return () => observer.disconnect();
   }, [visible]);
 
-  const status = useFontReady(font.family, font.previewWeight, font.previewStyle, visible);
+  const status = useFontReady(font, font.previewWeight, font.previewStyle, visible);
   const ready = status === "ready";
   const sample = text.trim() === "" ? DEFAULT_SAMPLE : text;
   const categories = font.categories.map((c) => CATEGORY_LABEL.get(c) ?? c).join(" · ");

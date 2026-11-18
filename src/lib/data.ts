@@ -52,12 +52,28 @@ export function toIndexEntry(f: FontFamily): FontIndexEntry {
     dateAdded: f.dateAdded,
     previewWeight,
     previewStyle,
+    preview: f.preview,
+    collection: f.collection,
+  };
+}
+
+/**
+ * Fills fields that older data/fonts.json records lack, so the site works before and after
+ * a re-import: preview 'css2', collection 'google-fonts', source.host 'github'.
+ */
+export function normalizeFamily(f: FontFamily): FontFamily {
+  return {
+    ...f,
+    preview: f.preview ?? "css2",
+    collection: f.collection ?? "google-fonts",
+    source: { ...f.source, host: f.source?.host ?? "github" },
   };
 }
 
 function load(): FontFamily[] {
   if (!families) {
-    families = JSON.parse(fs.readFileSync(DATA_PATH, "utf8")) as FontFamily[];
+    const raw = JSON.parse(fs.readFileSync(DATA_PATH, "utf8")) as FontFamily[];
+    families = raw.map(normalizeFamily);
   }
   return families;
 }

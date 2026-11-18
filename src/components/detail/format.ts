@@ -72,6 +72,7 @@ export function evidenceText(e: CategoryEvidence): string {
     if (m) return `Google Fonts tag ${m[1]} (score ${m[2]})`;
     return `Google Fonts tag ${e.detail}`;
   }
+  if (e.source === "fontsource") return `Fontsource metadata ${e.detail}`;
   const m = /^category:\s*"?([A-Z_]+)"?$/.exec(e.detail);
   if (m) return `METADATA category ${m[1]}`;
   return `METADATA ${e.detail}`;

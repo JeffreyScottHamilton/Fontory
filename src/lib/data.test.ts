@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { previewFor } from "@/lib/data";
-import type { FontStyle } from "@/lib/types";
+import { normalizeFamily, previewFor } from "@/lib/data";
+import type { FontFamily, FontStyle } from "@/lib/types";
 
 const st = (weight: number, style: "normal" | "italic" = "normal"): FontStyle => ({
   style,
@@ -32,5 +32,26 @@ describe("previewFor", () => {
       previewWeight: 200,
       previewStyle: "italic",
     });
+  });
+});
+
+describe("normalizeFamily", () => {
+  it("defaults preview, collection and source host for records from before the re-import", () => {
+    const old = { slug: "inter", source: { repo: "google/fonts", commit: "abc", url: "u" } } as unknown as FontFamily;
+    const f = normalizeFamily(old);
+    expect(f.preview).toBe("css2");
+    expect(f.collection).toBe("google-fonts");
+    expect(f.source.host).toBe("github");
+    expect(f.source.repo).toBe("google/fonts");
+  });
+
+  it("keeps explicit values", () => {
+    const f = normalizeFamily({
+      slug: "x",
+      preview: "fontface",
+      collection: "velvetyne",
+      source: { repo: "velvetyne/x", commit: "c", url: "u", host: "gitlab" },
+    } as unknown as FontFamily);
+    expect([f.preview, f.collection, f.source.host]).toEqual(["fontface", "velvetyne", "gitlab"]);
   });
 });

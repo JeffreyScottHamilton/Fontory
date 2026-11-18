@@ -41,7 +41,7 @@ export default function SelectedFont({ entry, text, size }: SelectedFontProps) {
   const [italic, setItalic] = useState(entry.previewStyle === "italic");
   const style = entry.hasItalic && italic ? "italic" : "normal";
 
-  const status = useFontReady(entry.family, weight, style, true);
+  const status = useFontReady(entry, weight, style, true);
   const ready = status === "ready";
   const sample = text.trim() === "" ? COMPARE_SAMPLE : text;
   const categories = entry.categories.map((c) => CATEGORY_LABEL.get(c) ?? c).join(" · ");

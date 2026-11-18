@@ -46,7 +46,7 @@ export default function FontCard({ font, text, size, view = "grid" }: FontCardPr
     return () => observer.disconnect();
   }, [visible]);
 
-  const status = useFontReady(font.family, font.previewWeight, font.previewStyle, visible);
+  const status = useFontReady(font, font.previewWeight, font.previewStyle, visible);
   const ready = status === "ready";
   const list = view === "list";
 
