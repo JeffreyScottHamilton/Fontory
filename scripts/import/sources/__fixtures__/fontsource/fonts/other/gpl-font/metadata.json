@@ -1,0 +1,12 @@
+{
+  "id": "gpl-font",
+  "family": "GPL Font",
+  "subsets": ["latin"],
+  "weights": [400],
+  "styles": ["normal"],
+  "variable": false,
+  "category": "serif",
+  "license": { "type": "GPL-3.0", "url": "https://example.com/gpl", "attribution": "Jane Doe" },
+  "source": "https://example.com/gpl",
+  "type": "other"
+}

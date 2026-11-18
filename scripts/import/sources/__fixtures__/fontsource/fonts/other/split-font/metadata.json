@@ -1,0 +1,12 @@
+{
+  "id": "split-font",
+  "family": "Split Font",
+  "subsets": ["cyrillic", "latin-ext", "vietnamese"],
+  "weights": [400],
+  "styles": ["normal"],
+  "variable": false,
+  "category": "serif",
+  "license": { "type": "OFL-1.1", "url": "https://example.com/ofl", "attribution": "Jane Doe" },
+  "source": "https://example.com/split",
+  "type": "other"
+}

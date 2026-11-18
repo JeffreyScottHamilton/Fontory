@@ -1,0 +1,12 @@
+{
+  "id": "reserved-font",
+  "family": "Reserved Font",
+  "subsets": ["latin"],
+  "weights": [400],
+  "styles": ["normal"],
+  "variable": false,
+  "category": "display",
+  "license": { "type": "OFL-1.1", "url": "https://example.com/ofl", "attribution": "Jane Doe" },
+  "source": "https://example.com/reserved",
+  "type": "other"
+}

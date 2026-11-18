@@ -3,6 +3,17 @@
     "repo": "google/fonts",
     "commit": "5bd87dfc525c8a0d1d8529d3684716e00c3fc59a"
   },
+  "fontsource": {
+    "repo": "fontsource/font-files",
+    "commit": "5a72889057f592bb0659629e38337359f94d53b2",
+    "path": "fonts/other"
+  },
+  "league": [
+    { "repo": "theleagueof/blackout", "commit": "4864cfc1749590e9f78549c6e57116fe98480c0f" },
+    { "repo": "theleagueof/chunk", "commit": "12a243f3fb7c7a68844901023f7d95d6eaf14104" },
+    { "repo": "theleagueof/junction", "commit": "fb73260e86dd301b383cf6cc9ca8e726ef806535" },
+    { "repo": "theleagueof/ostrich-sans", "commit": "a949d40d0576d12ba26e2a45e19c91fd0228c964" }
+  ],
   "upstreams": [
     {
       "repo": "IBM/plex",

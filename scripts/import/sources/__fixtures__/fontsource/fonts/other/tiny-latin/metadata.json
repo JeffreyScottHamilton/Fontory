@@ -1,0 +1,13 @@
+{
+  "id": "tiny-latin",
+  "family": "Tiny Latin",
+  "subsets": ["latin", "latin-ext", "menu"],
+  "weights": [400, 700],
+  "styles": ["normal", "italic"],
+  "defSubset": "latin",
+  "variable": false,
+  "category": "sans-serif",
+  "license": { "type": "OFL-1.1", "url": "https://example.com/ofl", "attribution": "Jane Doe" },
+  "source": "https://example.com/tiny-latin",
+  "type": "other"
+}

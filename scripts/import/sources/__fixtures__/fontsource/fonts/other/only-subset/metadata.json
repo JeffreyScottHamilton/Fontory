@@ -1,0 +1,12 @@
+{
+  "id": "only-subset",
+  "family": "Only Subset",
+  "subsets": ["vietnamese"],
+  "weights": [400],
+  "styles": ["normal"],
+  "variable": false,
+  "category": "other",
+  "license": { "type": "mit", "url": "https://example.com/mit", "attribution": "Bob" },
+  "source": "https://example.com/only-subset",
+  "type": "other"
+}
