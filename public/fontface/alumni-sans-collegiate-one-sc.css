@@ -1,0 +1,15 @@
+@font-face {
+  font-family: 'Alumni Sans Collegiate One SC';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/alumnisanscollegiateonesc/AlumniSansCollegiateOneSC-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Alumni Sans Collegiate One SC';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/alumnisanscollegiateonesc/AlumniSansCollegiateOneSC-Italic.ttf') format('truetype');
+}

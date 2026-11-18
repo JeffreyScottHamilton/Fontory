@@ -1,0 +1,39 @@
+@font-face {
+  font-family: 'Hind Kochi';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/hindkochi/HindKochi-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Hind Kochi';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/hindkochi/HindKochi-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Hind Kochi';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/hindkochi/HindKochi-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Hind Kochi';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/hindkochi/HindKochi-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Hind Kochi';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/hindkochi/HindKochi-Bold.ttf') format('truetype');
+}

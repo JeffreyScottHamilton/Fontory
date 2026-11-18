@@ -10,7 +10,9 @@ interface DownloadButtonProps {
   styles: FontStyle[];
   licenseFile: string;
   licenseUrl: string;
+  licenseName?: string;
   sourceUrl: string;
+  sourceRepo?: string;
 }
 
 type DownloadState = { kind: "idle" } | { kind: "progress"; done: number; total: number } | { kind: "error" };
@@ -20,7 +22,9 @@ export default function DownloadButton({
   styles,
   licenseFile,
   licenseUrl,
+  licenseName,
   sourceUrl,
+  sourceRepo,
 }: DownloadButtonProps) {
   const [state, setState] = useState<DownloadState>({ kind: "idle" });
   const busy = state.kind === "progress";
@@ -29,7 +33,7 @@ export default function DownloadButton({
     setState({ kind: "progress", done: 0, total: styles.length + 1 });
     try {
       const zipped = await buildFamilyZip(
-        { family, licenseFile, licenseUrl, styles, source: { url: sourceUrl } },
+        { family, licenseFile, licenseUrl, licenseName, styles, source: { url: sourceUrl, repo: sourceRepo } },
         (done, total) => setState({ kind: "progress", done, total }),
       );
       saveFamilyZip(family, zipped);

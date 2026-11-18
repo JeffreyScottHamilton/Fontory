@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'Sligoil';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/velvetyne/sligoil/Sligoil-Micro.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Sligoil';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/velvetyne/sligoil/Sligoil-MicroMedium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Sligoil';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/velvetyne/sligoil/Sligoil-MicroBold.woff2') format('woff2');
+}

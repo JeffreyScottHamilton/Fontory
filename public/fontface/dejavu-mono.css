@@ -1,0 +1,31 @@
+@font-face {
+  font-family: 'DejaVu Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/fontsource/font-files/5a72889057f592bb0659629e38337359f94d53b2/fonts/other/dejavu-mono/files/dejavu-mono-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'DejaVu Mono';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/fontsource/font-files/5a72889057f592bb0659629e38337359f94d53b2/fonts/other/dejavu-mono/files/dejavu-mono-latin-400-italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'DejaVu Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/fontsource/font-files/5a72889057f592bb0659629e38337359f94d53b2/fonts/other/dejavu-mono/files/dejavu-mono-latin-700-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'DejaVu Mono';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/fontsource/font-files/5a72889057f592bb0659629e38337359f94d53b2/fonts/other/dejavu-mono/files/dejavu-mono-latin-700-italic.woff2') format('woff2');
+}

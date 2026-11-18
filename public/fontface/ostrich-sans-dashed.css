@@ -1,0 +1,7 @@
+@font-face {
+  font-family: 'Ostrich Sans Dashed';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/theleagueof/ostrich-sans/a949d40d0576d12ba26e2a45e19c91fd0228c964/OstrichSansDashed-Medium.otf') format('opentype');
+}

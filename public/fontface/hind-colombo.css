@@ -1,0 +1,39 @@
+@font-face {
+  font-family: 'Hind Colombo';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/hindcolombo/HindColombo-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Hind Colombo';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/hindcolombo/HindColombo-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Hind Colombo';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/hindcolombo/HindColombo-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Hind Colombo';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/hindcolombo/HindColombo-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Hind Colombo';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/hindcolombo/HindColombo-Bold.ttf') format('truetype');
+}

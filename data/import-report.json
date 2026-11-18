@@ -1,251 +1,944 @@
 {
-  "generatedAt": "2026-11-18T21:17:04.257Z",
+  "generatedAt": "2026-11-18T22:21:50.295Z",
   "commit": "5bd87dfc525c8a0d1d8529d3684716e00c3fc59a",
   "totals": {
-    "families": 1993,
-    "styles": 3693,
+    "families": 2078,
+    "styles": 3877,
+    "byCollection": {
+      "google-fonts": {
+        "families": 2029,
+        "styles": 3755,
+        "fontface": 37
+      },
+      "league": {
+        "families": 10,
+        "styles": 17,
+        "fontface": 10
+      },
+      "velvetyne": {
+        "families": 31,
+        "styles": 50,
+        "fontface": 31
+      },
+      "fontsource": {
+        "families": 8,
+        "styles": 55,
+        "fontface": 8
+      }
+    },
     "byLicense": {
-      "OFL": 1954,
-      "APACHE2": 36,
+      "OFL": 2035,
+      "APACHE2": 37,
+      "CC0": 1,
+      "MIT": 1,
+      "UNLICENSE": 1,
       "UFL": 3
     },
     "byCategory": {
-      "serif": 358,
-      "sans-serif": 756,
-      "handwriting": 353,
-      "display": 500,
-      "monospace": 52,
+      "serif": 366,
+      "sans-serif": 778,
+      "handwriting": 355,
+      "display": 516,
+      "monospace": 56,
       "retro": 173,
       "gothic": 20,
       "pixel": 43,
       "decorative": 55
     }
   },
+  "recovered": [
+    {
+      "family": "Alumni Sans Collegiate One SC",
+      "slug": "alumni-sans-collegiate-one-sc",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Batang",
+      "slug": "batang",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "BatangChe",
+      "slug": "batangche",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Betania Patmos Guide Line",
+      "slug": "betania-patmos-guide-line",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Bhavuka",
+      "slug": "bhavuka",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Big Shoulders Display SC",
+      "slug": "big-shoulders-display-sc",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Big Shoulders Inline Display SC",
+      "slug": "big-shoulders-inline-display-sc",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Big Shoulders Inline Text SC",
+      "slug": "big-shoulders-inline-text-sc",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Big Shoulders Stencil Display SC",
+      "slug": "big-shoulders-stencil-display-sc",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Big Shoulders Stencil Text SC",
+      "slug": "big-shoulders-stencil-text-sc",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Big Shoulders Text SC",
+      "slug": "big-shoulders-text-sc",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Bungee Color",
+      "slug": "bungee-color",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Digital Numbers",
+      "slug": "digital-numbers",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "DotumChe",
+      "slug": "dotumche",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Fragment Mono SC",
+      "slug": "fragment-mono-sc",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Geist Serif",
+      "slug": "geist-serif",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "GulimChe",
+      "slug": "gulimche",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Gungsuh",
+      "slug": "gungsuh",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "GungsuhChe",
+      "slug": "gungsuhche",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Hermeneus One",
+      "slug": "hermeneus-one",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Hind Colombo",
+      "slug": "hind-colombo",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Hind Jalandhar",
+      "slug": "hind-jalandhar",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Hind Kochi",
+      "slug": "hind-kochi",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Madhuban",
+      "slug": "madhuban",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Merge One",
+      "slug": "merge-one",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Mervale Script",
+      "slug": "mervale-script",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Miama",
+      "slug": "miama",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "NATS",
+      "slug": "nats",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Nevermind",
+      "slug": "nevermind",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Noto Color Emoji Compat Test",
+      "slug": "noto-color-emoji-compat-test",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Porter Sans Block",
+      "slug": "porter-sans-block",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Signika Negative SC",
+      "slug": "signika-negative-sc",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Signika SC",
+      "slug": "signika-sc",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Sitara",
+      "slug": "sitara",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Strong",
+      "slug": "strong",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Yaldevi Colombo",
+      "slug": "yaldevi-colombo",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Yinmar",
+      "slug": "yinmar",
+      "reason": "css2 preview HTTP 400"
+    }
+  ],
   "excluded": [
     {
-      "repoPath": "apache/jsmathcmbx10",
+      "collection": "fontsource",
+      "id": "adwaita-mono",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "adwaita-sans",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "apfel-grotezk",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "argentum-sans",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "bagnard",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "bagnard-sans",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "blackout-midnight",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "blackout-sunrise",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "blackout-two-am",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "bluu-next",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "bravura",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "bravura-text",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "chunk-five",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "commit-mono",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "cooper-hewitt",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "dseg-weather",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "dseg14-classic",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "dseg14-classic-mini",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "dseg14-modern",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "dseg14-modern-mini",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "dseg7-classic",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "dseg7-classic-mini",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "dseg7-modern",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "dseg7-modern-mini",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "dseg7-segg-chan",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "dseg7-segg-chan-mini",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "firago",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-kai-g",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-kai-j",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-kai-t",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-10px-monospaced-jp",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-10px-monospaced-kr",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-10px-monospaced-sc",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-10px-monospaced-tc",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-10px-proportional-jp",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-10px-proportional-kr",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-10px-proportional-sc",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-10px-proportional-tc",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-12px-monospaced-jp",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-12px-monospaced-kr",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-12px-monospaced-sc",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-12px-monospaced-tc",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-12px-proportional-jp",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-12px-proportional-kr",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-12px-proportional-sc",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-12px-proportional-tc",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-8px-monospaced-jp",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-8px-monospaced-kr",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-8px-monospaced-sc",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-8px-monospaced-tc",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-8px-proportional-jp",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-8px-proportional-kr",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-8px-proportional-sc",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "fusion-pixel-8px-proportional-tc",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "geist-sans",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "genjyuu-gothic",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "hauora-sans",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "ia-writer-duo",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "ia-writer-mono",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "ia-writer-quattro",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "iosevka",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "iosevka-aile",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "iosevka-curly",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "iosevka-curly-slab",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "iosevka-etoile",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "junction",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "karmilla",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "league-mono",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "lextrall",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "lxgw-wenkai",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "maple-mono",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "monaspace-argon",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "monaspace-krypton",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "monaspace-neon",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "monaspace-radon",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "monaspace-xenon",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "mononoki",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "nebula-sans",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "norwester",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "noto-mono",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "open-runde",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "open-sauce-one",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "open-sauce-sans",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "open-sauce-two",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "opendyslexic",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "ostrich-sans",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "peace-sans",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "pitagon-sans",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "pitagon-sans-mono",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "pitagon-sans-text",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "pitagon-serif",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "pretendard",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "redaction",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "redaction-10",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "redaction-100",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "redaction-20",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "redaction-35",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "redaction-50",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "redaction-70",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "rubik-one",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "syne-italic",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "uncut-sans",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "unifont",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "unifontex",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "win95fa",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "yakuhanjp",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "yakuhanjps",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "yakuhanmp",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "yakuhanmps",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "yakuhanrp",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "fontsource",
+      "id": "yakuhanrps",
+      "reason": "LICENSE contains \"Reserved Font Name\""
+    },
+    {
+      "collection": "google-fonts",
+      "id": "apache/jsmathcmbx10",
       "reason": "license file LICENSE.txt missing in repo dir"
     },
     {
-      "repoPath": "apache/jsmathcmex10",
+      "collection": "google-fonts",
+      "id": "apache/jsmathcmex10",
       "reason": "license file LICENSE.txt missing in repo dir"
     },
     {
-      "repoPath": "apache/jsmathcmmi10",
+      "collection": "google-fonts",
+      "id": "apache/jsmathcmmi10",
       "reason": "license file LICENSE.txt missing in repo dir"
     },
     {
-      "repoPath": "apache/jsmathcmr10",
+      "collection": "google-fonts",
+      "id": "apache/jsmathcmr10",
       "reason": "license file LICENSE.txt missing in repo dir"
     },
     {
-      "repoPath": "apache/jsmathcmsy10",
+      "collection": "google-fonts",
+      "id": "apache/jsmathcmsy10",
       "reason": "license file LICENSE.txt missing in repo dir"
     },
     {
-      "repoPath": "apache/jsmathcmti10",
+      "collection": "google-fonts",
+      "id": "apache/jsmathcmti10",
       "reason": "license file LICENSE.txt missing in repo dir"
     },
     {
-      "repoPath": "ofl/alumnisanscollegiateonesc",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/batang",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/batangche",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/betaniapatmosguideline",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/bhavuka",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/bigshouldersdisplaysc",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/bigshouldersinlinedisplaysc",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/bigshouldersinlinetextsc",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/bigshouldersstencildisplaysc",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/bigshouldersstenciltextsc",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/bigshoulderstextsc",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/bungeecolor",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/digitalnumbers",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/dotumche",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/fragmentmonosc",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/geistserif",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/gulimche",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/gungsuh",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/gungsuhche",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/hermeneusone",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/hindcolombo",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/hindjalandhar",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/hindkochi",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/kumaroneoutline",
+      "collection": "google-fonts",
+      "id": "ofl/kumaroneoutline",
       "reason": "license file OFL.txt missing in repo dir"
     },
     {
-      "repoPath": "ofl/madhuban",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/mergeone",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/mervalescript",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/miama",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/mplusrounded1c",
+      "collection": "google-fonts",
+      "id": "ofl/mplusrounded1c",
       "reason": "license file OFL.txt missing in repo dir"
     },
     {
-      "repoPath": "ofl/nats",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/nevermind",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/notocoloremojicompattest",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/playwritenzbasicguides",
+      "collection": "google-fonts",
+      "id": "ofl/playwritenzbasicguides",
       "reason": "license file OFL.txt missing in repo dir"
     },
     {
-      "repoPath": "ofl/portersansblock",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/signikanegativesc",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/signikasc",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/sitara",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/strong",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/tinos",
+      "collection": "google-fonts",
+      "id": "ofl/tinos",
       "reason": "license file OFL.txt missing in repo dir"
     },
     {
-      "repoPath": "ofl/yaldevicolombo",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ofl/yinmar",
-      "reason": "verify: css2 preview HTTP 400"
-    },
-    {
-      "repoPath": "ufl/ubuntusans",
+      "collection": "google-fonts",
+      "id": "ufl/ubuntusans",
       "reason": "license file UFL.txt missing in repo dir"
     },
     {
-      "repoPath": "ufl/ubuntusansmono",
+      "collection": "google-fonts",
+      "id": "ufl/ubuntusansmono",
       "reason": "license file UFL.txt missing in repo dir"
+    },
+    {
+      "collection": "velvetyne",
+      "id": "Avara",
+      "reason": "no license file in repo (README only); license not guessed"
+    },
+    {
+      "collection": "velvetyne",
+      "id": "Velvetyne-Notdef",
+      "reason": "no license file in repo (README only); license not guessed"
+    },
+    {
+      "collection": "velvetyne",
+      "id": "Velvetyne-Standard-Character-Set",
+      "reason": "MIT License text; no font files"
+    },
+    {
+      "collection": "velvetyne",
+      "id": "feroniapi",
+      "reason": "LICENSE.txt is verbatim OFL 1.1 but README.md states the CUTE licence; conflict, excluded pending review"
+    },
+    {
+      "collection": "velvetyne",
+      "id": "flor-des-ruina",
+      "reason": "LICENSE.txt is OFL-based but the warranty wording is altered (not verbatim OFL 1.1); not guessed"
+    },
+    {
+      "collection": "velvetyne",
+      "id": "fungal",
+      "reason": "license text is Bitstream/DejaVu-derived, not SIL OFL 1.1"
+    },
+    {
+      "collection": "velvetyne",
+      "id": "lack",
+      "reason": "no license file in repo; license not guessed"
+    },
+    {
+      "collection": "velvetyne",
+      "id": "pilowlava3D",
+      "reason": "Free Art License 1.3 text, not SIL OFL 1.1; no font files"
+    },
+    {
+      "collection": "velvetyne",
+      "id": "velvetyne-libre-friends",
+      "reason": "no font files in repo"
     }
   ],
   "duplicates": [
     {
-      "repoPath": "ofl/intelonemono",
+      "collection": "google-fonts",
+      "id": "ofl/intelonemono",
       "family": "Intel One Mono",
       "slug": "intel-one-mono",
-      "keptRepoPath": "ofl/intelonemono",
+      "keptCollection": "google-fonts",
+      "keptId": "ofl/intelonemono",
       "reason": "duplicate style/weight file dropped: IntelOneMono[wght].ttf"
     },
     {
-      "repoPath": "ofl/intelonemono",
+      "collection": "google-fonts",
+      "id": "ofl/intelonemono",
       "family": "Intel One Mono",
       "slug": "intel-one-mono",
-      "keptRepoPath": "ofl/intelonemono",
+      "keptCollection": "google-fonts",
+      "keptId": "ofl/intelonemono",
       "reason": "duplicate style/weight file dropped: IntelOneMono-Italic[wght].ttf"
     },
     {
-      "repoPath": "ofl/wixmadefortext",
+      "collection": "google-fonts",
+      "id": "ofl/notosansnko_todelist",
+      "family": "Noto Sans N Ko",
+      "slug": "noto-sans-n-ko",
+      "keptCollection": "google-fonts",
+      "keptId": "ofl/notosansnko",
+      "reason": "duplicate family name (normalized)"
+    },
+    {
+      "collection": "google-fonts",
+      "id": "ofl/wixmadefortext",
       "family": "Wix Madefor Text",
       "slug": "wix-madefor-text",
-      "keptRepoPath": "ofl/wixmadefortext",
+      "keptCollection": "google-fonts",
+      "keptId": "ofl/wixmadefortext",
       "reason": "duplicate style/weight file dropped: WixMadeforText[wght].ttf"
     },
     {
-      "repoPath": "ofl/wixmadefortext",
+      "collection": "google-fonts",
+      "id": "ofl/wixmadefortext",
       "family": "Wix Madefor Text",
       "slug": "wix-madefor-text",
-      "keptRepoPath": "ofl/wixmadefortext",
+      "keptCollection": "google-fonts",
+      "keptId": "ofl/wixmadefortext",
       "reason": "duplicate style/weight file dropped: WixMadeforText-Italic[wght].ttf"
     }
   ],
@@ -324,6 +1017,10 @@
     "Category tags: /Expressive/Vintage maps to retro only at score >= 80; other category tags need score >= 50 (see tags.ts).",
     "IBM/plex coverage also counts googlefonts/plex, the Google Fonts fork of IBM/plex (see sources.json aliases).",
     "fontsource/fontsource is a dedupe-only mirror of Google Fonts: nothing is imported from it.",
-    "Variable fonts: styles are real font files; variable fonts list every standard weight within the wght axis."
+    "Variable fonts: styles are real font files; variable fonts list every standard weight within the wght axis.",
+    "Preview 'fontface': the family is previewed from public/fontface/<slug>.css, built from the style files (or previewUrl woff2). Preview 'css2': Google Fonts css2 API.",
+    "Google families whose css2 preview is refused (HTTP 400) are previewed with preview 'fontface' from their raw TTF files (see recovered).",
+    "Dedupe across collections: normalized name (lowercase a-z0-9) and slug; priority google-fonts > league > velvetyne > fontsource.",
+    "Velvetyne files are vendored unmodified under public/fonts/velvetyne/<slug>/ with the project's OFL license file."
   ]
 }

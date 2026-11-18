@@ -1,0 +1,15 @@
+@font-face {
+  font-family: 'Fragment Mono SC';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/fragmentmonosc/FragmentMonoSC-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Fragment Mono SC';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/fragmentmonosc/FragmentMonoSC-Italic.ttf') format('truetype');
+}

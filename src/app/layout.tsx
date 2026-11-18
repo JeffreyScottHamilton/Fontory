@@ -25,7 +25,7 @@ const geistMono = Geist_Mono({
 });
 
 const DESCRIPTION =
-  "Discover, preview and download open-licensed fonts from the Google Fonts collection.";
+  "Discover, preview and download open-licensed fonts from Google Fonts, The League of Moveable Type, Velvetyne and Fontsource.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),

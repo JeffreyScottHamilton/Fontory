@@ -1,0 +1,7 @@
+@font-face {
+  font-family: 'Cantique';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/velvetyne/cantique/Cantique-Normal.woff2') format('woff2');
+}

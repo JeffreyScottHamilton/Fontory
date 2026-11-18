@@ -1,14 +1,29 @@
-// Builds data/fonts.json and data/import-report.json from the google/fonts checkout.
-// Usage: tsx scripts/import/build.ts [--src <dir>]
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+// Builds data/fonts.json, data/import-report.json and the self-hosted preview sheets (public/fontface/*.css)
+// from every collection: Google Fonts (google/fonts checkout), The League, Velvetyne and Fontsource.
+// Usage: tsx scripts/import/build.ts [--src <dir>]   (--src overrides the google/fonts checkout)
+import { createHash } from "node:crypto";
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, unlinkSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseMetadata, type Metadata } from "./parse-metadata";
 import { categoriesFromTags, familyTagRows, keptTags, parseFamiliesCsv, RETRO_TAG, RETRO_TAG_MIN_SCORE } from "./tags";
 import { familyWeights } from "./weights";
-import { CATEGORIES, type CategoryEvidence, type CategoryId, type FontFamily, type FontStyle } from "../../src/lib/types";
+import { importFontsource, normalizeName, type SourceImport } from "./sources/fontsource";
+import { importLeague } from "./sources/league";
+import { importVelvetyne, vendorVelvetyne } from "./sources/velvetyne";
+import { fontFormat } from "../../src/lib/preview-css";
+import {
+  CATEGORIES,
+  type CategoryEvidence,
+  type CategoryId,
+  type CollectionId,
+  type FontFamily,
+  type FontStyle,
+} from "../../src/lib/types";
 
 const ROOT = path.resolve(__dirname, "../..");
-const SOURCES = JSON.parse(readFileSync(path.join(__dirname, "sources.json"), "utf8")) as {
+const SOURCES_PATH = path.join(__dirname, "sources.json");
+const VELVETYNE_PINS_PATH = path.join(__dirname, "sources", "velvetyne-pins.json");
+const SOURCES = JSON.parse(readFileSync(SOURCES_PATH, "utf8")) as {
   googleFonts: { repo: string; commit: string };
   upstreams: { repo: string; aliases?: string[]; role?: string; note?: string }[];
 };
@@ -16,6 +31,15 @@ const SHA = SOURCES.googleFonts.commit;
 const RAW_BASE = `https://raw.githubusercontent.com/google/fonts/${SHA}`;
 const DATA_DIR = path.join(ROOT, "data");
 const VERIFY_REPORT = path.join(DATA_DIR, "verify-report.json");
+const CACHE_ROOT = path.join(ROOT, ".cache", "sources");
+const PUBLIC_DIR = path.join(ROOT, "public");
+const FONTFACE_DIR = path.join(PUBLIC_DIR, "fontface");
+const VELVETYNE_VENDOR_DIR = path.join(PUBLIC_DIR, "fonts", "velvetyne");
+
+// Dedupe priority across collections: earlier wins on a normalized name or slug clash.
+const COLLECTION_PRIORITY: CollectionId[] = ["google-fonts", "league", "velvetyne", "fontsource"];
+// The verify step records this exact reason for a Google family whose css2 preview is refused.
+const CSS2_UNAVAILABLE_REASON = "css2 preview HTTP 400";
 
 const LICENSES: Record<string, { file: string; name: string }> = {
   OFL: { file: "OFL.txt", name: "SIL Open Font License 1.1" },
@@ -36,10 +60,15 @@ const REPORT_NOTES = [
   "IBM/plex coverage also counts googlefonts/plex, the Google Fonts fork of IBM/plex (see sources.json aliases).",
   "fontsource/fontsource is a dedupe-only mirror of Google Fonts: nothing is imported from it.",
   "Variable fonts: styles are real font files; variable fonts list every standard weight within the wght axis.",
+  "Preview 'fontface': the family is previewed from public/fontface/<slug>.css, built from the style files (or previewUrl woff2). Preview 'css2': Google Fonts css2 API.",
+  "Google families whose css2 preview is refused (HTTP 400) are previewed with preview 'fontface' from their raw TTF files (see recovered).",
+  "Dedupe across collections: normalized name (lowercase a-z0-9) and slug; priority google-fonts > league > velvetyne > fontsource.",
+  "Velvetyne files are vendored unmodified under public/fonts/velvetyne/<slug>/ with the project's OFL license file.",
 ];
 
-export interface Excluded { repoPath: string; reason: string }
-export interface Duplicate { repoPath: string; family: string; slug: string; keptRepoPath: string; reason: string }
+// Excluded family: id is the repo path (Google) or the importer's id (others).
+export interface Excluded { collection: CollectionId; id: string; reason: string }
+export interface Duplicate { collection: CollectionId; id: string; family: string; slug: string; keptCollection: CollectionId; keptId: string; reason: string }
 export type LicenseCheck = { file: string; branch: string; firstLine: string } | { error: string } | null;
 
 export function slugify(family: string): string {
@@ -60,9 +89,9 @@ export function normalizeRepo(url: string): string {
 
 const sortStr = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 
-// Dedupe: first candidate wins on slug or family-name collision. Pure; kept families keep input order.
-export function dedupe(candidates: FontFamily[]): { kept: FontFamily[]; duplicates: Duplicate[] } {
-  const duplicates: Duplicate[] = [];
+// Dedupe within one collection: first candidate wins on slug or family-name collision. Pure; kept families keep input order.
+export function dedupe(candidates: FontFamily[]): { kept: FontFamily[]; duplicates: { repoPath: string; family: string; slug: string; keptRepoPath: string; reason: string }[] } {
+  const duplicates: { repoPath: string; family: string; slug: string; keptRepoPath: string; reason: string }[] = [];
   const bySlug = new Map<string, FontFamily>();
   const byName = new Map<string, FontFamily>();
   const kept: FontFamily[] = [];
@@ -85,12 +114,72 @@ export function dedupe(candidates: FontFamily[]): { kept: FontFamily[]; duplicat
   return { kept, duplicates };
 }
 
+// Dedupe across collections. Candidates must be in COLLECTION_PRIORITY order (the first one wins).
+// A clash is an equal normalized name or an equal slug.
+export function dedupeAcross(candidates: FontFamily[]): { kept: FontFamily[]; duplicates: Duplicate[] } {
+  const duplicates: Duplicate[] = [];
+  const bySlug = new Map<string, FontFamily>();
+  const byName = new Map<string, FontFamily>();
+  const kept: FontFamily[] = [];
+  for (const f of candidates) {
+    const nameKey = normalizeName(f.family);
+    const byNameHit = byName.get(nameKey);
+    const clash = byNameHit ?? bySlug.get(f.slug);
+    if (clash) {
+      duplicates.push({
+        collection: f.collection,
+        id: idOf(f),
+        family: f.family,
+        slug: f.slug,
+        keptCollection: clash.collection,
+        keptId: idOf(clash),
+        reason: byNameHit ? "duplicate family name (normalized)" : "slug collision",
+      });
+      continue;
+    }
+    bySlug.set(f.slug, f);
+    byName.set(nameKey, f);
+    kept.push(f);
+  }
+  return { kept, duplicates };
+}
+
+// Stable per-family identifier for reports: the repo path for Google, else the importer's source repo.
+function idOf(f: FontFamily): string {
+  return f.repoPath || f.source.repo;
+}
+
+// Escapes a value for a single-quoted CSS string.
+function cssString(value: string): string {
+  return value.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+}
+
+// One @font-face per style for a self-hosted (preview 'fontface') family. Pure.
+export function fontfaceCss(f: Pick<FontFamily, "family" | "styles" | "axes">): string {
+  const wght = f.axes.find((a) => a.tag === "wght");
+  const blocks = f.styles.map((s) => {
+    const src = s.previewUrl ?? s.url;
+    // A variable file covers the whole wght axis, so advertise the range instead of one weight.
+    const weight = wght && s.filename.includes("[") ? `${wght.min} ${wght.max}` : `${s.weight}`;
+    return [
+      "@font-face {",
+      `  font-family: '${cssString(f.family)}';`,
+      `  font-style: ${s.style};`,
+      `  font-weight: ${weight};`,
+      "  font-display: swap;",
+      `  src: url('${cssString(src)}') format('${fontFormat(src)}');`,
+      "}",
+    ].join("\n");
+  });
+  return blocks.join("\n\n") + "\n";
+}
+
 function categoryOrder(ids: Iterable<CategoryId>): CategoryId[] {
   const set = new Set(ids);
   return CATEGORIES.map((c) => c.id).filter((id) => set.has(id));
 }
 
-// Validates one family directory and returns a FontFamily, or the exclusion reason.
+// Validates one Google family directory and returns a FontFamily, or the exclusion reason.
 export function buildFamily(
   repoPath: string,
   srcDir: string,
@@ -186,10 +275,12 @@ export function buildFamily(
       subsets: meta.subsets.filter((s) => s !== "menu"),
       dateAdded: meta.dateAdded,
       repoPath,
-      source: { repo: "google/fonts", commit: SHA, url: `https://github.com/google/fonts/tree/${SHA}/${repoPath}` },
+      source: { repo: "google/fonts", commit: SHA, url: `https://github.com/google/fonts/tree/${SHA}/${repoPath}`, host: "github" },
       upstream,
       copyright,
       related: [],
+      preview: "css2",
+      collection: "google-fonts",
     },
   };
 }
@@ -216,10 +307,6 @@ export function computeRelated(families: FontFamily[]): Map<string, string[]> {
   return out;
 }
 
-function readJsonIfExists<T>(file: string): T | null {
-  return existsSync(file) ? (JSON.parse(readFileSync(file, "utf8")) as T) : null;
-}
-
 function discoverRepoPaths(srcDir: string): string[] {
   const out: string[] = [];
   for (const top of readdirSync(srcDir, { withFileTypes: true })) {
@@ -233,23 +320,16 @@ function discoverRepoPaths(srcDir: string): string[] {
   return out.sort(sortStr);
 }
 
-function main(): void {
-  const argv = process.argv.slice(2);
-  const srcFlag = argv.indexOf("--src");
-  const srcDir = path.resolve(srcFlag >= 0 ? argv[srcFlag + 1] : path.join(ROOT, ".cache/sources/google-fonts"));
-  if (!existsSync(path.join(srcDir, "tags/all/families.csv"))) {
-    throw new Error(`checkout not found at ${srcDir}; run npm run import:fetch first`);
-  }
-
+// Google Fonts collection: every METADATA.pb directory, validated, deduped by name and slug.
+function importGoogle(srcDir: string, unmappedCategories: Set<string>): { families: FontFamily[]; excluded: Excluded[]; duplicates: Duplicate[] } {
   const tagRows = familyTagRows(parseFamiliesCsv(readFileSync(path.join(srcDir, "tags/all/families.csv"), "utf8")));
-  const unmappedCategories = new Set<string>();
   const excluded: Excluded[] = [];
   const candidates: FontFamily[] = [];
   const styleDrops: { repoPath: string; file: string }[] = [];
 
   for (const repoPath of discoverRepoPaths(srcDir)) {
     const result = buildFamily(repoPath, srcDir, tagRows, unmappedCategories);
-    if ("reason" in result) excluded.push({ repoPath, reason: result.reason });
+    if ("reason" in result) excluded.push({ collection: "google-fonts", id: repoPath, reason: result.reason });
     else {
       candidates.push(result.family);
       for (const file of result.droppedStyles) styleDrops.push({ repoPath, file });
@@ -259,33 +339,127 @@ function main(): void {
   const duplicates: Duplicate[] = [];
   for (const d of styleDrops) {
     const f = candidates.find((c) => c.repoPath === d.repoPath)!;
-    duplicates.push({ repoPath: d.repoPath, family: f.family, slug: f.slug, keptRepoPath: d.repoPath, reason: `duplicate style/weight file dropped: ${d.file}` });
-  }
-  const deduped = dedupe(candidates);
-  duplicates.push(...deduped.duplicates);
-  let kept = deduped.kept;
-
-  // Verify exclusions (from a previous `import:verify` run). Only a report for the pinned commit applies.
-  const verifyRaw = readJsonIfExists<{ commit?: string; failedFamilies: { family: string; reason: string }[]; upstreamLicenses: UpstreamLicense[] }>(VERIFY_REPORT);
-  const verify = verifyRaw && verifyRaw.commit === SHA ? verifyRaw : null;
-  if (verifyRaw && !verify) {
-    console.warn(`BUILD: WARNING ignoring ${VERIFY_REPORT}: it was verified at commit ${verifyRaw.commit ?? "(none)"}, pinned commit is ${SHA}; re-run npm run import:verify`);
-  }
-  if (verify) {
-    const failed = new Map(verify.failedFamilies.map((f) => [f.family, f.reason]));
-    kept = kept.filter((f) => {
-      const reason = failed.get(f.family);
-      if (reason === undefined) return true;
-      excluded.push({ repoPath: f.repoPath, reason: `verify: ${reason}` });
-      return false;
+    duplicates.push({
+      collection: "google-fonts",
+      id: d.repoPath,
+      family: f.family,
+      slug: f.slug,
+      keptCollection: "google-fonts",
+      keptId: d.repoPath,
+      reason: `duplicate style/weight file dropped: ${d.file}`,
     });
   }
+  const deduped = dedupe(candidates);
+  for (const d of deduped.duplicates) {
+    duplicates.push({
+      collection: "google-fonts",
+      id: d.repoPath,
+      family: d.family,
+      slug: d.slug,
+      keptCollection: "google-fonts",
+      keptId: d.keptRepoPath,
+      reason: d.reason,
+    });
+  }
+  return { families: deduped.kept, excluded, duplicates };
+}
 
-  kept.sort((a, b) => sortStr(a.family, b.family));
+interface UpstreamLicense { repo: string; file: string | null; branch: string | null; firstLine: string | null }
+interface VerifyReport {
+  commit?: string;
+  pins?: string;
+  failedFamilies: { family: string; reason: string }[];
+  css2Unavailable?: string[];
+  upstreamLicenses: UpstreamLicense[];
+}
+
+// Hash of every pinned source input. A verify report only applies to the exact pins it was run against.
+function pinsHash(): string {
+  return createHash("sha256")
+    .update(readFileSync(SOURCES_PATH))
+    .update(readFileSync(VELVETYNE_PINS_PATH))
+    .digest("hex");
+}
+
+function loadVerify(): VerifyReport | null {
+  if (!existsSync(VERIFY_REPORT)) return null;
+  const raw = JSON.parse(readFileSync(VERIFY_REPORT, "utf8")) as VerifyReport;
+  if (raw.pins === pinsHash()) return raw;
+  console.warn(`BUILD: WARNING ignoring ${VERIFY_REPORT}: it was verified against other pins; re-run npm run import:verify`);
+  return null;
+}
+
+// Google families the css2 API refused. Recorded by verify as css2Unavailable (or, in older reports, as the sole failure reason).
+function css2Unavailable(verify: VerifyReport | null): Set<string> {
+  const out = new Set(verify?.css2Unavailable ?? []);
+  for (const f of verify?.failedFamilies ?? []) if (f.reason === CSS2_UNAVAILABLE_REASON) out.add(f.family);
+  return out;
+}
+
+function main(): void {
+  const argv = process.argv.slice(2);
+  const srcFlag = argv.indexOf("--src");
+  const srcDir = path.resolve(srcFlag >= 0 ? argv[srcFlag + 1] : path.join(CACHE_ROOT, "google-fonts"));
+  if (!existsSync(path.join(srcDir, "tags/all/families.csv"))) {
+    throw new Error(`checkout not found at ${srcDir}; run npm run import:fetch first`);
+  }
+
+  const unmappedCategories = new Set<string>();
+  const google = importGoogle(srcDir, unmappedCategories);
+
+  // Verify results for this pinned state (if any). Failures are name-based across collections.
+  const verify = loadVerify();
+  const failed = new Map<string, string>();
+  for (const f of verify?.failedFamilies ?? []) if (f.reason !== CSS2_UNAVAILABLE_REASON) failed.set(f.family, f.reason);
+
+  // Google families refused by css2 come back as self-hosted fontface previews.
+  const unavailable = css2Unavailable(verify);
+  const recovered: { family: string; slug: string; reason: string }[] = [];
+  for (const f of google.families) {
+    if (!unavailable.has(f.family)) continue;
+    f.preview = "fontface";
+    recovered.push({ family: f.family, slug: f.slug, reason: CSS2_UNAVAILABLE_REASON });
+  }
+
+  const imports: SourceImport[] = [
+    { collection: "google-fonts", families: google.families, excluded: google.excluded.map((e) => ({ id: e.id, reason: e.reason })) },
+    importLeague(CACHE_ROOT),
+    importVelvetyne(CACHE_ROOT),
+    importFontsource(CACHE_ROOT),
+  ];
+
+  const excluded: Excluded[] = [];
+  const duplicates: Duplicate[] = [...google.duplicates];
+  const keptByCollection = new Map<CollectionId, FontFamily[]>();
+  for (const imp of imports) {
+    for (const e of imp.excluded) excluded.push({ collection: imp.collection, id: e.id, reason: e.reason });
+    // Verify exclusions apply before cross-collection dedupe: a failing family does not block a lower-priority copy.
+    const kept = imp.families.filter((f) => {
+      const reason = failed.get(f.family);
+      if (reason === undefined) return true;
+      excluded.push({ collection: f.collection, id: idOf(f), reason: `verify: ${reason}` });
+      return false;
+    });
+    keptByCollection.set(imp.collection, kept);
+  }
+  const candidates = COLLECTION_PRIORITY.flatMap((c) => keptByCollection.get(c) ?? []);
+  const deduped = dedupeAcross(candidates);
+  duplicates.push(...deduped.duplicates);
+  const kept = deduped.kept.sort((a, b) => sortStr(a.family, b.family));
+
+  // Velvetyne: vendor the kept families' files (unmodified) and drop vendored directories that are no longer kept.
+  const velvetyne = kept.filter((f) => f.collection === "velvetyne");
+  vendorVelvetyne(CACHE_ROOT, VELVETYNE_VENDOR_DIR, velvetyne);
+  const velvetyneSlugs = new Set(velvetyne.map((f) => f.slug));
+  mkdirSync(VELVETYNE_VENDOR_DIR, { recursive: true });
+  for (const entry of readdirSync(VELVETYNE_VENDOR_DIR, { withFileTypes: true })) {
+    if (entry.isDirectory() && !velvetyneSlugs.has(entry.name)) rmSync(path.join(VELVETYNE_VENDOR_DIR, entry.name), { recursive: true, force: true });
+  }
+
   const related = computeRelated(kept);
   for (const f of kept) f.related = related.get(f.slug) ?? [];
-  excluded.sort((a, b) => sortStr(a.repoPath, b.repoPath));
-  duplicates.sort((a, b) => sortStr(a.repoPath, b.repoPath));
+  excluded.sort((a, b) => sortStr(a.collection, b.collection) || sortStr(a.id, b.id));
+  duplicates.sort((a, b) => sortStr(a.collection, b.collection) || sortStr(a.id, b.id));
 
   // Upstream coverage and license checks.
   const upstreams = SOURCES.upstreams.map((u) => {
@@ -309,30 +483,47 @@ function main(): void {
   for (const f of kept) byLicense[f.license] = (byLicense[f.license] ?? 0) + 1;
   const byCategory: Record<string, number> = {};
   for (const c of CATEGORIES) byCategory[c.id] = kept.filter((f) => f.categories.includes(c.id)).length;
+  const byCollection = Object.fromEntries(
+    COLLECTION_PRIORITY.map((c) => {
+      const fams = kept.filter((f) => f.collection === c);
+      return [c, { families: fams.length, styles: fams.reduce((a, f) => a + f.styles.length, 0), fontface: fams.filter((f) => f.preview === "fontface").length }];
+    }),
+  );
+  const totalStyles = kept.reduce((a, f) => a + f.styles.length, 0);
 
   const report = {
     generatedAt: new Date().toISOString(),
     commit: SHA,
     totals: {
       families: kept.length,
-      styles: kept.reduce((a, f) => a + f.styles.length, 0),
+      styles: totalStyles,
+      byCollection,
       byLicense,
       byCategory,
     },
+    recovered,
     excluded,
     duplicates,
     upstreams,
     notes: REPORT_NOTES,
   };
 
+  // Output: data files and the self-hosted preview sheets (stale sheets removed).
   mkdirSync(DATA_DIR, { recursive: true });
   writeFileSync(path.join(DATA_DIR, "fonts.json"), JSON.stringify(kept) + "\n");
   writeFileSync(path.join(DATA_DIR, "import-report.json"), JSON.stringify(report, null, 2) + "\n");
 
-  console.log(`BUILD: families=${kept.length} styles=${report.totals.styles} excluded=${excluded.length} duplicates=${duplicates.length} verifyApplied=${verify !== null}`);
+  mkdirSync(FONTFACE_DIR, { recursive: true });
+  const fontface = kept.filter((f) => f.preview === "fontface");
+  const wanted = new Set(fontface.map((f) => `${f.slug}.css`));
+  for (const f of fontface) writeFileSync(path.join(FONTFACE_DIR, `${f.slug}.css`), fontfaceCss(f));
+  for (const name of readdirSync(FONTFACE_DIR)) {
+    if (name.endsWith(".css") && !wanted.has(name)) unlinkSync(path.join(FONTFACE_DIR, name));
+  }
+
+  console.log(`BUILD: families=${kept.length} styles=${totalStyles} excluded=${excluded.length} duplicates=${duplicates.length} recovered=${recovered.length} fontface=${fontface.length} verifyApplied=${verify !== null}`);
+  for (const c of COLLECTION_PRIORITY) console.log(`BUILD: ${c} families=${byCollection[c].families} styles=${byCollection[c].styles}`);
   if (unmappedCategories.size) console.log(`BUILD: unmapped METADATA categories ignored: ${[...unmappedCategories].join(", ")}`);
 }
-
-interface UpstreamLicense { repo: string; file: string | null; branch: string | null; firstLine: string | null }
 
 if (require.main === module) main();

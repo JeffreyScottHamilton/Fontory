@@ -1,0 +1,31 @@
+@font-face {
+  font-family: 'Sitara';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/sitara/Sitara-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Sitara';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/sitara/Sitara-Italic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Sitara';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/sitara/Sitara-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Sitara';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/sitara/Sitara-BoldItalic.ttf') format('truetype');
+}

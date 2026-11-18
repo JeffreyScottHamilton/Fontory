@@ -1,0 +1,7 @@
+@font-face {
+  font-family: 'DejaVu Math';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/fontsource/font-files/5a72889057f592bb0659629e38337359f94d53b2/fonts/other/dejavu-math/files/dejavu-math-latin-400-normal.woff2') format('woff2');
+}

@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'Happy Times at the IKOB New Game Plus Edition';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/velvetyne/happy-times-at-the-ikob-new-game-plus-edition/happy-times-NG_regular_master_web.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Happy Times at the IKOB New Game Plus Edition';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/velvetyne/happy-times-at-the-ikob-new-game-plus-edition/happy-times-NG_italic_master_web.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Happy Times at the IKOB New Game Plus Edition';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/velvetyne/happy-times-at-the-ikob-new-game-plus-edition/happy-times-NG_bold_master_web.woff2') format('woff2');
+}

@@ -2,9 +2,11 @@ import { strToU8, zipSync, type Zippable } from "fflate";
 import type { FontFamily } from "@/lib/types";
 
 // The fields the archive needs. A full FontFamily satisfies this, and so does a caller
-// that only has the individual values.
+// that only has the individual values. licenseName and source.repo are optional so older
+// callers still compile; the README is simply less specific without them.
 export type FamilyZipSource = Pick<FontFamily, "family" | "licenseFile" | "licenseUrl" | "styles"> & {
-  source: Pick<FontFamily["source"], "url">;
+  licenseName?: string;
+  source: Pick<FontFamily["source"], "url"> & { repo?: string };
 };
 
 async function fetchBytes(url: string): Promise<Uint8Array> {
@@ -13,15 +15,18 @@ async function fetchBytes(url: string): Promise<Uint8Array> {
   return new Uint8Array(await response.arrayBuffer());
 }
 
+// README.txt: family name, the real source repository and URL, the license name and file.
 export function familyReadme(family: FamilyZipSource): string {
-  return [
-    family.family,
+  const lines = [family.family, ""];
+  if (family.source.repo) lines.push(`Source repository: ${family.source.repo}`);
+  lines.push(`Source: ${family.source.url}`);
+  if (family.licenseName) lines.push(`License: ${family.licenseName} (${family.licenseFile})`);
+  lines.push(
     "",
-    `Source: ${family.source.url}`,
+    `The font files in this folder are from ${family.source.repo ?? "the source above"}. The license in ${family.licenseFile} applies to them.`,
     "",
-    `The font files in this folder are from Google Fonts. The license in ${family.licenseFile} applies to them.`,
-    "",
-  ].join("\n");
+  );
+  return lines.join("\n");
 }
 
 // Archive layout: <family>/<license>, every style file, README.txt.

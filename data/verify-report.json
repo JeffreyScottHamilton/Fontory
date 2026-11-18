@@ -1,157 +1,48 @@
 {
-  "checkedAt": "2026-11-18T21:05:43.682Z",
+  "checkedAt": "2026-11-18T22:21:40.451Z",
   "commit": "5bd87dfc525c8a0d1d8529d3684716e00c3fc59a",
-  "families": 1993,
-  "stylesChecked": 3693,
-  "failedFamilies": [
-    {
-      "family": "Alumni Sans Collegiate One SC",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Batang",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "BatangChe",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Betania Patmos Guide Line",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Bhavuka",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Big Shoulders Display SC",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Big Shoulders Inline Display SC",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Big Shoulders Inline Text SC",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Big Shoulders Stencil Display SC",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Big Shoulders Stencil Text SC",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Big Shoulders Text SC",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Bungee Color",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Digital Numbers",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "DotumChe",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Fragment Mono SC",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Geist Serif",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "GulimChe",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Gungsuh",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "GungsuhChe",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Hermeneus One",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Hind Colombo",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Hind Jalandhar",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Hind Kochi",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Madhuban",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Merge One",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Mervale Script",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Miama",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "NATS",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Nevermind",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Noto Color Emoji Compat Test",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Porter Sans Block",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Signika Negative SC",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Signika SC",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Sitara",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Strong",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Yaldevi Colombo",
-      "reason": "css2 preview HTTP 400"
-    },
-    {
-      "family": "Yinmar",
-      "reason": "css2 preview HTTP 400"
-    }
+  "pins": "d10728f5d2e4bd542807f06fb5599c54fb6435dd63135e16538de63eabae3550",
+  "families": 2078,
+  "stylesChecked": 3877,
+  "failedFamilies": [],
+  "css2Unavailable": [
+    "Alumni Sans Collegiate One SC",
+    "Batang",
+    "BatangChe",
+    "Betania Patmos Guide Line",
+    "Bhavuka",
+    "Big Shoulders Display SC",
+    "Big Shoulders Inline Display SC",
+    "Big Shoulders Inline Text SC",
+    "Big Shoulders Stencil Display SC",
+    "Big Shoulders Stencil Text SC",
+    "Big Shoulders Text SC",
+    "Bungee Color",
+    "Digital Numbers",
+    "DotumChe",
+    "Fragment Mono SC",
+    "Geist Serif",
+    "GulimChe",
+    "Gungsuh",
+    "GungsuhChe",
+    "Hermeneus One",
+    "Hind Colombo",
+    "Hind Jalandhar",
+    "Hind Kochi",
+    "Madhuban",
+    "Merge One",
+    "Mervale Script",
+    "Miama",
+    "NATS",
+    "Nevermind",
+    "Noto Color Emoji Compat Test",
+    "Porter Sans Block",
+    "Signika Negative SC",
+    "Signika SC",
+    "Sitara",
+    "Strong",
+    "Yaldevi Colombo",
+    "Yinmar"
   ],
   "upstreamLicenses": [
     {
@@ -228,7 +119,7 @@
         "Yaldevi Colombo",
         "Yinmar"
       ],
-      "note": "Google css2 API returns HTTP 400 for the preview request of these families, so they are excluded from the library. Kept as a known limitation."
+      "note": "Google css2 API returns HTTP 400 for the preview of these families. They are previewed from self-hosted /fontface/<slug>.css built from the raw TTF files (preview 'fontface')."
     }
   ]
 }

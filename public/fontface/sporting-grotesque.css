@@ -1,0 +1,15 @@
+@font-face {
+  font-family: 'Sporting Grotesque';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/velvetyne/sporting-grotesque/Sporting_Grotesque-Regular_web.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Sporting Grotesque';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/velvetyne/sporting-grotesque/Sporting_Grotesque-Bold_web.woff2') format('woff2');
+}

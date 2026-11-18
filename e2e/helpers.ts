@@ -4,7 +4,7 @@ export const COMPARE_SAMPLE = "The quick brown fox jumps over the lazy dog 01234
 export const DEFAULT_SAMPLE = "The quick brown fox jumps over the lazy dog";
 
 // Must match the port in playwright.config.ts.
-export const BASE_ORIGIN = "http://localhost:3100";
+export const BASE_ORIGIN = `http://localhost:${process.env.E2E_PORT ?? 3100}`;
 
 // Font loads go to fonts.googleapis.com / fonts.gstatic.com, so allow generous time.
 export const FONT_TIMEOUT = 20_000;

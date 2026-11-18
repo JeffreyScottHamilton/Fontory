@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const PORT = 3100;
+const PORT = Number(process.env.E2E_PORT ?? 3100);
 const baseURL = `http://localhost:${PORT}`;
 
 export default defineConfig({
@@ -26,7 +26,7 @@ export default defineConfig({
   webServer: {
     command: `npm run start -- -p ${PORT}`,
     url: baseURL,
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.E2E_FRESH,
     timeout: 120000,
   },
 });

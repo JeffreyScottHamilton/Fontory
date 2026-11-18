@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'Junction';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/theleagueof/junction/fb73260e86dd301b383cf6cc9ca8e726ef806535/Junction-light.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Junction';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/theleagueof/junction/fb73260e86dd301b383cf6cc9ca8e726ef806535/Junction-regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Junction';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/theleagueof/junction/fb73260e86dd301b383cf6cc9ca8e726ef806535/Junction-bold.otf') format('opentype');
+}

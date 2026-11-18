@@ -25,8 +25,9 @@ export default function HomePage() {
           <span>OPEN LICENSES</span>
         </p>
         <p className="max-w-[52ch] text-base leading-relaxed text-muted md:text-lg">
-          Open-licensed families from the Google Fonts collection, each shown in its own letterforms. Narrow the
-          list, compare two faces, and download the files with their license.
+          Open-licensed families from Google Fonts, The League of Moveable Type, Velvetyne and Fontsource, each
+          shown in its own letterforms. Narrow the list, compare two faces, and download the files with their
+          license.
         </p>
       </section>
       <FontBrowser index={index} />

@@ -1,0 +1,15 @@
+@font-face {
+  font-family: 'Letters';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/velvetyne/letters/Letters-Torn.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Letters';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/velvetyne/letters/Letters-Lavish.woff2') format('woff2');
+}

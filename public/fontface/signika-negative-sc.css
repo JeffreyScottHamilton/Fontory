@@ -1,0 +1,31 @@
+@font-face {
+  font-family: 'Signika Negative SC';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/signikanegativesc/SignikaNegativeSC-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Signika Negative SC';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/signikanegativesc/SignikaNegativeSC-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Signika Negative SC';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/signikanegativesc/SignikaNegativeSC-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Signika Negative SC';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://raw.githubusercontent.com/google/fonts/5bd87dfc525c8a0d1d8529d3684716e00c3fc59a/ofl/signikanegativesc/SignikaNegativeSC-Bold.ttf') format('truetype');
+}

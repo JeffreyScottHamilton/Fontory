@@ -3,8 +3,8 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { buildFamily, dedupe } from "./build";
-import type { FontFamily } from "../../src/lib/types";
+import { buildFamily, dedupe, dedupeAcross, fontfaceCss } from "./build";
+import type { CollectionId, FontFamily } from "../../src/lib/types";
 
 const FIXTURES = fileURLToPath(new URL("./__fixtures__/", import.meta.url));
 
@@ -132,5 +132,110 @@ describe("validation exclusions (buildFamily)", () => {
   it("accepts .otf and upper-case extensions", () => {
     writeRepo("ofl/foo", metadataText("Foo", "OFL", [{ filename: "Foo-Regular.OTF" }]), "OFL.txt");
     expect("family" in build("ofl/foo")).toBe(true);
+  });
+});
+
+// Minimal non-Google family for cross-collection dedupe tests.
+function collectionFamily(collection: CollectionId, family: string, slug = family.toLowerCase().replace(/\s+/g, "-")): FontFamily {
+  return {
+    slug,
+    family,
+    designer: "Test",
+    license: "OFL",
+    licenseName: "SIL Open Font License 1.1",
+    licenseFile: "LICENSE.txt",
+    licenseUrl: "/fonts/x/LICENSE.txt",
+    categories: [],
+    categoryEvidence: [],
+    tags: [],
+    styles: [{ style: "normal", weight: 400, filename: `${slug}.otf`, fullName: family, url: `/fonts/x/${slug}.otf` }],
+    weights: [400],
+    hasItalic: false,
+    axes: [],
+    isVariable: false,
+    subsets: [],
+    dateAdded: "2020-01-01",
+    repoPath: "",
+    source: { repo: `${collection}/x`, commit: "abc", url: "https://example.com", host: "github" },
+    upstream: null,
+    copyright: "",
+    related: [],
+    preview: "fontface",
+    collection,
+  };
+}
+
+describe("dedupeAcross", () => {
+  it("keeps the higher-priority collection when normalized names match", () => {
+    const google = collectionFamily("google-fonts", "Noto Sans", "noto-sans");
+    const fontsource = collectionFamily("fontsource", "Noto-Sans", "noto-sans-fontsource");
+    const { kept, duplicates } = dedupeAcross([google, fontsource]);
+    expect(kept.map((f) => f.collection)).toEqual(["google-fonts"]);
+    expect(duplicates).toEqual([
+      {
+        collection: "fontsource",
+        id: "fontsource/x",
+        family: "Noto-Sans",
+        slug: "noto-sans-fontsource",
+        keptCollection: "google-fonts",
+        keptId: "google-fonts/x",
+        reason: "duplicate family name (normalized)",
+      },
+    ]);
+  });
+
+  it("reports a slug collision across collections", () => {
+    const league = collectionFamily("league", "Ostrich Sans", "ostrich");
+    const velvetyne = collectionFamily("velvetyne", "Ostrich", "ostrich");
+    const { kept, duplicates } = dedupeAcross([league, velvetyne]);
+    expect(kept).toHaveLength(1);
+    expect(duplicates[0]).toMatchObject({ collection: "velvetyne", keptCollection: "league", reason: "slug collision" });
+  });
+
+  it("keeps families from every collection when names and slugs are distinct", () => {
+    const a = collectionFamily("velvetyne", "Basteleur Moonlight");
+    const b = collectionFamily("league", "Blackout Sunrise");
+    const { kept, duplicates } = dedupeAcross([a, b]);
+    expect(kept).toHaveLength(2);
+    expect(duplicates).toEqual([]);
+  });
+});
+
+describe("fontfaceCss", () => {
+  it("emits one @font-face per style with the exact family name, weight, style and format", () => {
+    const f = collectionFamily("velvetyne", "Basteleur Moonlight");
+    f.styles = [
+      { style: "normal", weight: 300, filename: "Basteleur-Moonlight.otf", fullName: "x", url: "/fonts/velvetyne/basteleur-moonlight/Basteleur-Moonlight.otf", previewUrl: "/fonts/velvetyne/basteleur-moonlight/Basteleur-Moonlight.woff2" },
+      { style: "italic", weight: 400, filename: "Italic.ttf", fullName: "y", url: "https://raw.example/Italic.ttf" },
+    ];
+    expect(fontfaceCss(f)).toBe(
+      [
+        "@font-face {",
+        "  font-family: 'Basteleur Moonlight';",
+        "  font-style: normal;",
+        "  font-weight: 300;",
+        "  font-display: swap;",
+        "  src: url('/fonts/velvetyne/basteleur-moonlight/Basteleur-Moonlight.woff2') format('woff2');",
+        "}",
+        "",
+        "@font-face {",
+        "  font-family: 'Basteleur Moonlight';",
+        "  font-style: italic;",
+        "  font-weight: 400;",
+        "  font-display: swap;",
+        "  src: url('https://raw.example/Italic.ttf') format('truetype');",
+        "}",
+        "",
+      ].join("\n"),
+    );
+  });
+
+  it("escapes quotes in the family name and advertises the wght range for variable files", () => {
+    const f = collectionFamily("google-fonts", "Ma'lam");
+    f.axes = [{ tag: "wght", min: 100, max: 900 }];
+    f.styles = [{ style: "normal", weight: 400, filename: "Ma[wght].ttf", fullName: "x", url: "https://raw.example/Ma%5Bwght%5D.ttf" }];
+    const css = fontfaceCss(f);
+    expect(css).toContain("font-family: 'Ma\\'lam';");
+    expect(css).toContain("font-weight: 100 900;");
   });
 });

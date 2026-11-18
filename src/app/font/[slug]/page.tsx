@@ -120,7 +120,9 @@ export default async function FontDetailPage({ params }: PageProps) {
             styles={f.styles}
             licenseFile={f.licenseFile}
             licenseUrl={f.licenseUrl}
+            licenseName={f.licenseName}
             sourceUrl={f.source.url}
+            sourceRepo={f.source.repo}
           />
           <FavoriteButton slug={f.slug} family={f.family} />
           <Link href={`/compare?a=${f.slug}`} className="btn btn-secondary">

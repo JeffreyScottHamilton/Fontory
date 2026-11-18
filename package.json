@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "e2e": "playwright test --trace off",
-    "import:fetch": "bash scripts/import/fetch-sources.sh",
+    "import:fetch": "bash scripts/import/fetch-sources.sh && bash scripts/import/fetch-extra.sh && bash scripts/import/fetch-velvetyne.sh",
     "import:build": "tsx scripts/import/build.ts",
     "import:verify": "tsx scripts/import/verify-remote.ts"
   },
