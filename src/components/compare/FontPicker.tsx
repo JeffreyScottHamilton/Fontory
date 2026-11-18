@@ -6,6 +6,26 @@ import type { FontIndexEntry } from "@/lib/types";
 
 const RESULT_LIMIT = 8;
 
+function SearchIcon() {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width="16"
+      height="16"
+      aria-hidden="true"
+      focusable="false"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.25}
+      strokeLinecap="round"
+      className="pointer-events-none absolute top-1/2 left-0 -translate-y-1/2 text-muted"
+    >
+      <circle cx="7" cy="7" r="4.75" />
+      <path d="M10.5 10.5 14 14" />
+    </svg>
+  );
+}
+
 interface FontPickerProps {
   label: string;
   index: FontIndexEntry[];
@@ -24,33 +44,36 @@ export default function FontPicker({ label, index, onPick }: FontPickerProps) {
 
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={inputId} className="text-sm text-muted">
+      <label htmlFor={inputId} className="label-mono">
         {label}
       </label>
-      <input
-        id={inputId}
-        type="text"
-        autoComplete="off"
-        spellCheck={false}
-        value={query}
-        placeholder="Search fonts"
-        onChange={(e) => setQuery(e.target.value)}
-        className="w-full border border-rule bg-ground px-3 py-2 text-base text-ink placeholder:text-muted"
-      />
+      <div className="relative">
+        <SearchIcon />
+        <input
+          id={inputId}
+          type="text"
+          autoComplete="off"
+          spellCheck={false}
+          value={query}
+          placeholder="Search fonts"
+          onChange={(e) => setQuery(e.target.value)}
+          className="field pl-7"
+        />
+      </div>
       {searching && results.length > 0 ? (
-        <ul aria-label={`${label} results`} className="flex flex-col border border-rule">
+        <ul aria-label={`${label} results`} className="flex flex-col border-t border-rule">
           {results.map((entry) => (
-            <li key={entry.slug} className="border-b border-rule last:border-b-0">
+            <li key={entry.slug} className="border-b border-rule">
               <button
                 type="button"
                 onClick={() => {
                   onPick(entry.slug);
                   setQuery("");
                 }}
-                className="flex min-h-11 w-full min-w-0 flex-col justify-center px-3 py-2 text-left hover:underline underline-offset-4"
+                className="flex min-h-11 w-full min-w-0 items-baseline justify-between gap-4 py-2 text-left hover:underline underline-offset-4"
               >
-                <span className="truncate text-ink">{entry.family}</span>
-                <span className="truncate text-xs text-muted">{entry.designer}</span>
+                <span className="truncate text-[15px] font-medium text-ink">{entry.family}</span>
+                <span className="label-mono shrink-0 truncate text-right">{entry.designer}</span>
               </button>
             </li>
           ))}

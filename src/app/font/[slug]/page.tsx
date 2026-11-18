@@ -6,9 +6,11 @@ import FavoriteButton from "@/components/FavoriteButton";
 import FontCard from "@/components/FontCard";
 import CharacterSet from "@/components/detail/CharacterSet";
 import DetailPreview from "@/components/detail/DetailPreview";
+import DetailSection from "@/components/detail/DetailSection";
+import FamilyName from "@/components/detail/FamilyName";
 import InfoPanel from "@/components/detail/InfoPanel";
 import UseOnWeb from "@/components/detail/UseOnWeb";
-import { axesText, weightsText } from "@/components/detail/format";
+import { categoryLabel, variableWeightLabel, weightsText } from "@/components/detail/format";
 import { getFamily, getIndex, toIndexEntry } from "@/lib/data";
 import { cssSnippet } from "@/lib/google-css";
 import type { FontIndexEntry } from "@/lib/types";
@@ -72,8 +74,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-const SECTION_HEADING = "text-xl font-semibold tracking-tight";
-
 export default async function FontDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const f = getFamily(slug);
@@ -87,27 +87,39 @@ export default async function FontDetailPage({ params }: PageProps) {
     .map((s) => bySlug.get(s))
     .filter((e): e is FontIndexEntry => e !== undefined);
 
-  return (
-    <article className="flex flex-col gap-12">
-      <nav aria-label="Breadcrumb">
-        <ol className="flex flex-wrap items-center gap-2 text-sm text-muted">
-          <li>
-            <Link href="/" className="hover:text-ink">
-              Fonts
-            </Link>
-          </li>
-          <li aria-hidden="true">/</li>
-          <li aria-current="page" className="text-ink">
-            {f.family}
-          </li>
-        </ol>
-      </nav>
+  const styleCount = `${f.styles.length} ${f.styles.length === 1 ? "style" : "styles"}`;
+  const meta = [
+    styleCount,
+    f.isVariable ? "Variable" : null,
+    ...f.categories.map(categoryLabel),
+    f.licenseName,
+  ].filter((m): m is string => Boolean(m));
 
-      <header className="flex flex-col gap-6 border-b border-rule pb-8">
-        <div>
-          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">{f.family}</h1>
-          <p className="mt-2 text-lg text-muted">by {f.designer}</p>
+  return (
+    <article className="flex flex-col gap-16 md:gap-20">
+      <header className="flex flex-col gap-8 md:gap-10">
+        <nav aria-label="Breadcrumb">
+          <ol className="label-mono flex flex-wrap items-center gap-2">
+            <li>
+              <Link href="/" className="hover:text-ink">
+                Fonts
+              </Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" className="text-ink">
+              {f.family}
+            </li>
+          </ol>
+        </nav>
+
+        <div className="flex min-w-0 flex-col gap-5">
+          <FamilyName family={f.family} styles={f.styles} weight={preview.previewWeight} style={preview.previewStyle} />
+          <div className="flex flex-col gap-2">
+            <p className="text-lg text-ink">by {f.designer}</p>
+            <p className="label-mono tabular-nums">{meta.join(" · ")}</p>
+          </div>
         </div>
+
         <div className="flex flex-wrap items-center gap-3">
           <DownloadButton
             family={f.family}
@@ -118,11 +130,8 @@ export default async function FontDetailPage({ params }: PageProps) {
             sourceUrl={f.source.url}
           />
           <FavoriteButton slug={f.slug} family={f.family} />
-          <Link
-            href={`/compare?a=${f.slug}`}
-            className="inline-flex min-h-11 items-center border border-rule px-4 text-sm text-ink hover:border-ink"
-          >
-            Compare with another font
+          <Link href={`/compare?a=${f.slug}`} className="btn btn-secondary">
+            Compare
           </Link>
         </div>
       </header>
@@ -130,56 +139,38 @@ export default async function FontDetailPage({ params }: PageProps) {
       <DetailPreview
         family={f.family}
         styles={f.styles}
+        weights={f.weights}
         previewWeight={preview.previewWeight}
         previewStyle={preview.previewStyle}
-        isVariable={f.isVariable}
-        axesText={axesText(f.axes)}
+        variableLabel={variableWeightLabel(f.axes)}
         weightsText={weightsText(f)}
       />
 
-      <section aria-labelledby="charset-heading" className="flex flex-col gap-6">
-        <h2 id="charset-heading" className={SECTION_HEADING}>
-          Character set
-        </h2>
-        <CharacterSet
-          family={f.family}
-          subsets={f.subsets}
-          weight={preview.previewWeight}
-          style={preview.previewStyle}
-        />
-      </section>
+      <CharacterSet
+        family={f.family}
+        subsets={f.subsets}
+        weight={preview.previewWeight}
+        style={preview.previewStyle}
+      />
 
-      <section aria-labelledby="details-heading" className="flex flex-col gap-4">
-        <h2 id="details-heading" className={SECTION_HEADING}>
-          Details
-        </h2>
-        <InfoPanel font={f} />
-      </section>
+      <UseOnWeb
+        linkTag={snippet.linkTag}
+        importLine={snippet.importLine}
+        fontFamilyLine={snippet.fontFamilyLine}
+      />
 
-      <section aria-labelledby="web-heading" className="flex flex-col gap-4">
-        <h2 id="web-heading" className={SECTION_HEADING}>
-          Use on the web
-        </h2>
-        <UseOnWeb
-          linkTag={snippet.linkTag}
-          importLine={snippet.importLine}
-          fontFamilyLine={snippet.fontFamilyLine}
-        />
-      </section>
+      <InfoPanel font={f} />
 
       {related.length > 0 && (
-        <section aria-labelledby="related-heading" className="flex flex-col gap-4">
-          <h2 id="related-heading" className={SECTION_HEADING}>
-            Related fonts
-          </h2>
-          <ul className="grid sm:grid-cols-2 sm:gap-x-8">
+        <DetailSection id="related-heading" number="06" title="Related">
+          <ul className="grid gap-px border border-rule bg-rule sm:grid-cols-2 xl:grid-cols-3">
             {related.map((e) => (
-              <li key={e.slug}>
+              <li key={e.slug} className="min-w-0 bg-ground">
                 <FontCard font={e} text="" size={32} />
               </li>
             ))}
           </ul>
-        </section>
+        </DetailSection>
       )}
     </article>
   );

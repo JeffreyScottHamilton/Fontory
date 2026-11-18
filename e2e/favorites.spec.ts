@@ -28,13 +28,13 @@ test.describe("favorites", () => {
     await expect(page.getByRole("heading", { name: "Inter", exact: true })).toBeVisible({ timeout: FONT_TIMEOUT });
 
     // Remove it from the list. The empty state replaces the list.
-    await page.getByRole("button", { name: "Favorite Inter", exact: true }).click();
-    await expect(page.getByText("No favorites yet.", { exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Remove Inter", exact: true }).click();
+    await expect(page.getByText("Nothing saved yet.", { exact: true })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Inter", exact: true })).toHaveCount(0);
 
     // The removal persists across a reload too.
     await page.reload();
-    await expect(page.getByText("No favorites yet.", { exact: true })).toBeVisible();
+    await expect(page.getByText("Nothing saved yet.", { exact: true })).toBeVisible();
   });
 
   test("a favorite added from the home page appears on /favorites", async ({ page }) => {

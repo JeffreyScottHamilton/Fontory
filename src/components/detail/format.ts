@@ -21,6 +21,29 @@ export function weightLabel(weight: number): string {
   return name ? `${name} ${weight}` : String(weight);
 }
 
+/** Mono tag for a weight: "700 BOLD", "350". */
+export function weightTag(weight: number): string {
+  const name = WEIGHT_NAMES[weight];
+  return name ? `${weight} ${name.toUpperCase()}` : String(weight);
+}
+
+/** Mono tag for a style row: "700 BOLD ITALIC", "400 REGULAR". */
+export function styleTag(style: FontStyle): string {
+  return `${weightTag(style.weight)}${style.style === "italic" ? " ITALIC" : ""}`;
+}
+
+/** "VARIABLE · WGHT 100–900" for a wght axis, otherwise null. */
+export function variableWeightLabel(axes: FontFamily["axes"]): string | null {
+  const wght = axes.find((a) => a.tag === "wght");
+  return wght ? `VARIABLE · WGHT ${wght.min}–${wght.max}` : null;
+}
+
+/** "U+0041" for the first code point of a glyph. */
+export function codePointLabel(glyph: string): string {
+  const cp = glyph.codePointAt(0) ?? 0;
+  return `U+${cp.toString(16).toUpperCase().padStart(4, "0")}`;
+}
+
 /** "Regular 400", "Regular 400 Italic". */
 export function styleLabel(style: FontStyle): string {
   return `${weightLabel(style.weight)}${style.style === "italic" ? " Italic" : ""}`;

@@ -1,3 +1,4 @@
+import DetailSection from "@/components/detail/DetailSection";
 import GlyphGrid from "@/components/detail/GlyphGrid";
 import { glyphRows } from "@/components/detail/format";
 
@@ -9,5 +10,9 @@ interface CharacterSetProps {
 }
 
 export default function CharacterSet({ family, subsets, weight, style }: CharacterSetProps) {
-  return <GlyphGrid family={family} weight={weight} style={style} rows={glyphRows(subsets)} />;
+  return (
+    <DetailSection id="charset-heading" number="03" title="Character set">
+      <GlyphGrid family={family} weight={weight} style={style} rows={glyphRows(subsets)} />
+    </DetailSection>
+  );
 }
