@@ -1,34 +1,9 @@
 import { getFamily } from "@/lib/data";
+import { PRERENDER_SLUGS } from "@/lib/prerender";
 
 // Family JSON, cached indefinitely after the first request (the data only changes on redeploy).
-// Only these slugs are prerendered at build time. Other slugs render on first request.
-// Keep in sync with the list in src/app/font/[slug]/page.tsx.
-const PRERENDER_SLUGS = [
-  "inter",
-  "roboto",
-  "playfair-display",
-  "jetbrains-mono",
-  "fira-code",
-  "ibm-plex-sans",
-  "open-sans",
-  "lato",
-  "montserrat",
-  "poppins",
-  "source-sans-3",
-  "raleway",
-  "merriweather",
-  "lora",
-  "nunito",
-  "oswald",
-  "space-grotesk",
-  "dm-sans",
-  "work-sans",
-  "pt-sans",
-  "noto-sans",
-  "roboto-mono",
-  "source-code-pro",
-  "ubuntu",
-];
+// Only PRERENDER_SLUGS are prerendered at build time (see src/lib/prerender.ts). Other slugs
+// render on first request.
 
 // force-static is the documented way to get ISR for paths generated at runtime.
 export const dynamic = "force-static";

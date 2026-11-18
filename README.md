@@ -67,23 +67,20 @@ The generated data files are committed so the site builds without network access
      it for `metadataBase` (`src/app/layout.tsx`, which Open Graph URLs resolve against), the
      sitemap URLs (`src/app/sitemap.ts`), and the `Sitemap:` line in `robots.txt`
      (`src/app/robots.ts`). The site sets no canonical link tags.
-   - `NEXT_PUBLIC_SITE_URL` is an optional override. Precedence, first match wins:
-     1. `VERCEL_PROJECT_PRODUCTION_URL`, if set and non-empty. Its value is a bare host and is
-        prefixed with `https://`.
-     2. `NEXT_PUBLIC_SITE_URL`, with trailing slashes removed.
+   - `NEXT_PUBLIC_SITE_URL` is an optional override. Precedence, first non-empty value wins:
+     1. `NEXT_PUBLIC_SITE_URL`, trimmed, with trailing slashes removed.
+     2. `VERCEL_PROJECT_PRODUCTION_URL`, a bare host that is prefixed with `https://`.
      3. `http://localhost:3000`.
-   - Because Vercel always sets the first variable, `NEXT_PUBLIC_SITE_URL` takes effect only
-     when `VERCEL_PROJECT_PRODUCTION_URL` is unset (for example, on a host other than Vercel).
-     To serve a custom domain on Vercel, assign it to the Production environment in the project's
-     domain settings.
+   - Setting `NEXT_PUBLIC_SITE_URL` therefore overrides the URL that Vercel sets. Without it, Vercel's
+     production URL is used. To serve a custom domain on Vercel, assign it to the Production
+     environment in the project's domain settings.
 4. Prerendering and on-demand pages. `src/app/font/[slug]/page.tsx` and
-   `src/app/api/family/[slug]/route.ts` both use the same list of 24 slugs (`PRERENDER_SLUGS`,
-   all present in `data/fonts.json`). Those are rendered at build time through
+   `src/app/api/family/[slug]/route.ts` both import the same list of 24 slugs (`PRERENDER_SLUGS`
+   in `src/lib/prerender.ts`, all present in `data/fonts.json`). Those are rendered at build time through
    `generateStaticParams`. Both routes set `dynamic = "force-static"`, `dynamicParams = true` and
    `revalidate = false`, so every other slug is rendered on the first request and then cached
    with no time-based revalidation until the next deployment. Unknown slugs return 404: the page
-   calls `notFound()`, and the API returns `{"error":"Not found"}` with status 404. The two slug
-   lists must be kept in sync by hand.
+   calls `notFound()`, and the API returns `{"error":"Not found"}` with status 404.
 5. `data/fonts.json` is read at runtime with `fs` (`src/lib/data.ts`), which file tracing cannot
    detect. `next.config.ts` adds it to the server functions for `/font/[slug]` and
    `/api/family/[slug]` through `outputFileTracingIncludes`.

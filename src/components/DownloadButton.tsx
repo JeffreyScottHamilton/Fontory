@@ -1,7 +1,7 @@
 "use client";
 
-import { strToU8, zipSync, type Zippable } from "fflate";
 import { useState } from "react";
+import { buildFamilyZip, saveFamilyZip } from "@/lib/family-zip";
 import type { FontStyle } from "@/lib/types";
 
 interface DownloadButtonProps {
@@ -15,12 +15,6 @@ interface DownloadButtonProps {
 
 type DownloadState = { kind: "idle" } | { kind: "progress"; done: number; total: number } | { kind: "error" };
 
-async function fetchBytes(url: string): Promise<Uint8Array> {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`);
-  return new Uint8Array(await response.arrayBuffer());
-}
-
 export default function DownloadButton({
   family,
   styles,
@@ -32,51 +26,13 @@ export default function DownloadButton({
   const busy = state.kind === "progress";
 
   async function handleClick() {
-    const total = styles.length + 1; // every style file + the license
-    let done = 0;
-    setState({ kind: "progress", done, total });
+    setState({ kind: "progress", done: 0, total: styles.length + 1 });
     try {
-      const fetchTracked = async (url: string) => {
-        const bytes = await fetchBytes(url);
-        done += 1;
-        setState({ kind: "progress", done, total });
-        return bytes;
-      };
-
-      const [license, ...files] = await Promise.all([
-        fetchTracked(licenseUrl),
-        ...styles.map((s) => fetchTracked(s.url)),
-      ]);
-
-      const folder = family;
-      const entries: Zippable = {
-        [folder]: {
-          [licenseFile]: license,
-          ...Object.fromEntries(styles.map((s, i) => [s.filename, files[i]])),
-          "README.txt": strToU8(
-            [
-              family,
-              "",
-              `Source: ${sourceUrl}`,
-              "",
-              `The font files in this folder are from Google Fonts. The license in ${licenseFile} applies to them.`,
-              "",
-            ].join("\n"),
-          ),
-        },
-      };
-
-      // Font files barely compress, so store them (level 0) and keep the main thread free.
-      const zipped = zipSync(entries, { level: 0 });
-      const blob = new Blob([zipped as BlobPart], { type: "application/zip" });
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = `${family}.zip`;
-      document.body.appendChild(anchor);
-      anchor.click();
-      anchor.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      const zipped = await buildFamilyZip(
+        { family, licenseFile, licenseUrl, styles, source: { url: sourceUrl } },
+        (done, total) => setState({ kind: "progress", done, total }),
+      );
+      saveFamilyZip(family, zipped);
       setState({ kind: "idle" });
     } catch {
       setState({ kind: "error" });

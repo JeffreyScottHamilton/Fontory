@@ -13,37 +13,12 @@ import UseOnWeb from "@/components/detail/UseOnWeb";
 import { categoryLabel, variableWeightLabel, weightsText } from "@/components/detail/format";
 import { getFamily, getIndex, toIndexEntry } from "@/lib/data";
 import { cssSnippet } from "@/lib/google-css";
+import { PRERENDER_SLUGS } from "@/lib/prerender";
 import type { FontIndexEntry } from "@/lib/types";
 
-// Only these pages are prerendered at build time. Other slugs render on first request
-// and are cached indefinitely (revalidate = false). Unknown slugs return 404 via notFound().
-// Keep in sync with the list in src/app/api/family/[slug]/route.ts.
-const PRERENDER_SLUGS = [
-  "inter",
-  "roboto",
-  "playfair-display",
-  "jetbrains-mono",
-  "fira-code",
-  "ibm-plex-sans",
-  "open-sans",
-  "lato",
-  "montserrat",
-  "poppins",
-  "source-sans-3",
-  "raleway",
-  "merriweather",
-  "lora",
-  "nunito",
-  "oswald",
-  "space-grotesk",
-  "dm-sans",
-  "work-sans",
-  "pt-sans",
-  "noto-sans",
-  "roboto-mono",
-  "source-code-pro",
-  "ubuntu",
-];
+// Only PRERENDER_SLUGS are prerendered at build time (see src/lib/prerender.ts).
+// Other slugs render on first request and are cached indefinitely (revalidate = false).
+// Unknown slugs return 404 via notFound().
 
 // force-static is the documented way to get ISR for paths generated at runtime (see
 // generateStaticParams docs). This page reads no cookies, headers or search params.
