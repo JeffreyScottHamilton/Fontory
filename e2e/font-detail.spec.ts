@@ -77,4 +77,27 @@ test.describe("font detail: Inter", () => {
     expect(text).toContain("font-family");
     expect(text).toContain("'Inter'");
   });
+
+  test("the glyph grid is one tab stop and arrow keys move the inspector", async ({ page }) => {
+    await page.goto("/font/inter");
+    const charset = page.getByRole("region", { name: "Character set", exact: true });
+    const a = charset.getByRole("button", { name: "A U+0041", exact: true });
+    const b = charset.getByRole("button", { name: "B U+0042", exact: true });
+
+    await a.focus();
+    await expect(a).toHaveAttribute("aria-pressed", "true");
+
+    await page.keyboard.press("ArrowRight");
+    await expect(b).toBeFocused();
+    await expect(b).toHaveAttribute("aria-pressed", "true");
+    // The inspector shows the code point of the selected glyph.
+    await expect(charset.getByText("U+0042", { exact: true })).toBeVisible();
+
+    // One Tab from the grid leaves it: the focused element is outside the character set section.
+    await page.keyboard.press("Tab");
+    const insideGrid = await page.evaluate(
+      () => !!document.activeElement?.closest('section[aria-labelledby="charset-heading"]'),
+    );
+    expect(insideGrid).toBe(false);
+  });
 });

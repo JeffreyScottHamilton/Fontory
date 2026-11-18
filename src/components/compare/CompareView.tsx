@@ -47,7 +47,7 @@ export default function CompareView({ index }: CompareViewProps) {
         </div>
         <button
           type="button"
-          disabled={!aSlug && !bSlug}
+          disabled={!a && !b}
           onClick={() => go(bSlug, aSlug)}
           className="btn btn-secondary shrink-0"
         >
@@ -63,7 +63,7 @@ export default function CompareView({ index }: CompareViewProps) {
       <div className="grid md:grid-cols-2">
         <section aria-label="Font A" className="flex min-w-0 flex-col gap-8 pt-8 md:border-r md:border-rule md:pt-10 md:pr-8">
           <FontPicker label="Font A" index={index} onPick={(slug) => go(slug, bSlug)} />
-          {a ? <SelectedFont key={a.slug} entry={a} text={preview.text} size={preview.size} /> : <EmptySide />}
+          {a ? <SelectedFont key={a.slug} entry={a} text={preview.text} size={preview.size} /> : <EmptySide slug={aSlug} />}
         </section>
 
         <section
@@ -71,13 +71,15 @@ export default function CompareView({ index }: CompareViewProps) {
           className="mt-12 flex min-w-0 flex-col gap-8 border-t border-rule pt-8 md:mt-0 md:border-t-0 md:pt-10 md:pl-8"
         >
           <FontPicker label="Font B" index={index} onPick={(slug) => go(aSlug, slug)} />
-          {b ? <SelectedFont key={b.slug} entry={b} text={preview.text} size={preview.size} /> : <EmptySide />}
+          {b ? <SelectedFont key={b.slug} entry={b} text={preview.text} size={preview.size} /> : <EmptySide slug={bSlug} />}
         </section>
       </div>
     </div>
   );
 }
 
-function EmptySide() {
+/** Shown in a column with no resolved font. An unknown slug from the URL gets its own line. */
+function EmptySide({ slug }: { slug: string }) {
+  if (slug) return <p className="text-[15px] text-muted">No font named “{slug}”.</p>;
   return <p className="text-[15px] text-muted">Choose a font to compare.</p>;
 }

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import FavoriteDownload from "@/components/favorites/FavoriteDownload";
-import { removeFavorite } from "@/lib/favorites";
 import { DEFAULT_SAMPLE } from "@/lib/preview";
 import { useFontReady } from "@/lib/useFontStylesheet";
 import { CATEGORIES, type FontIndexEntry } from "@/lib/types";
@@ -14,9 +13,11 @@ interface FavoriteRowProps {
   font: FontIndexEntry;
   text: string;
   size: number;
+  /** Removes the favorite. The parent owns focus after the row unmounts. */
+  onRemove: (slug: string) => void;
 }
 
-export default function FavoriteRow({ font, text, size }: FavoriteRowProps) {
+export default function FavoriteRow({ font, text, size, onRemove }: FavoriteRowProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -74,8 +75,9 @@ export default function FavoriteRow({ font, text, size }: FavoriteRowProps) {
           <FavoriteDownload slug={font.slug} name={font.family} />
           <button
             type="button"
+            data-remove-slug={font.slug}
             aria-label={`Remove ${font.family}`}
-            onClick={() => removeFavorite(font.slug)}
+            onClick={() => onRemove(font.slug)}
             className="btn btn-tertiary"
           >
             Remove

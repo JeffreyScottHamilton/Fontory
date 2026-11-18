@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useMemo, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import { filterFonts } from "@/lib/search";
 import type { FontIndexEntry } from "@/lib/types";
 
@@ -35,6 +35,7 @@ interface FontPickerProps {
 export default function FontPicker({ label, index, onPick }: FontPickerProps) {
   const inputId = useId();
   const [query, setQuery] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
   const searching = query.trim() !== "";
   // The list only opens while there is a query, so the comparison stays above the fold.
   const results = useMemo(
@@ -50,6 +51,7 @@ export default function FontPicker({ label, index, onPick }: FontPickerProps) {
       <div className="relative">
         <SearchIcon />
         <input
+          ref={inputRef}
           id={inputId}
           type="text"
           autoComplete="off"
@@ -69,6 +71,8 @@ export default function FontPicker({ label, index, onPick }: FontPickerProps) {
                 onClick={() => {
                   onPick(entry.slug);
                   setQuery("");
+                  // The result list unmounts with the query, so focus returns to the input.
+                  inputRef.current?.focus();
                 }}
                 className="flex min-h-11 w-full min-w-0 items-baseline justify-between gap-4 py-2 text-left hover:underline underline-offset-4"
               >

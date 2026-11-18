@@ -99,6 +99,17 @@ export function useFontReady(
   const key = enabled ? `${family}|${weight}|${style}` : null;
   const [settled, setSettled] = useState<{ key: string; status: "ready" | "error" } | null>(null);
 
+  // One timer per face, started on the first request. A stylesheet or font load that never settles
+  // within FONT_READY_TIMEOUT_MS ends in 'error' instead of loading forever. A result that arrived
+  // first is kept, because the updater leaves an existing settle for this key alone.
+  useEffect(() => {
+    if (!key || typeof document === "undefined") return;
+    const timer = setTimeout(() => {
+      setSettled((prev) => (prev?.key === key ? prev : { key, status: "error" }));
+    }, FONT_READY_TIMEOUT_MS);
+    return () => clearTimeout(timer);
+  }, [key]);
+
   useEffect(() => {
     if (!key || sheet !== "ready" || typeof document === "undefined" || !document.fonts) return;
     const spec = `${style} ${weight} 1em "${family}"`;
@@ -106,10 +117,8 @@ export function useFontReady(
     const finish = (status: "ready" | "error") => {
       if (done) return;
       done = true;
-      clearTimeout(timer);
       setSettled({ key, status });
     };
-    const timer = setTimeout(() => finish("error"), FONT_READY_TIMEOUT_MS);
     document.fonts.load(spec).then(
       (faces) => {
         let usable = false;
@@ -124,7 +133,6 @@ export function useFontReady(
     );
     return () => {
       done = true;
-      clearTimeout(timer);
     };
   }, [key, sheet, family, weight, style]);
 

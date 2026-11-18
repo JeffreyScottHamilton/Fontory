@@ -13,6 +13,7 @@ type DownloadState =
   | { kind: "idle" }
   | { kind: "fetching" }
   | { kind: "progress"; done: number; total: number }
+  | { kind: "done" }
   | { kind: "error" };
 
 export default function FavoriteDownload({ slug, name }: FavoriteDownloadProps) {
@@ -27,7 +28,7 @@ export default function FavoriteDownload({ slug, name }: FavoriteDownloadProps) 
       const family = (await response.json()) as FontFamily;
       const zipped = await buildFamilyZip(family, (done, total) => setState({ kind: "progress", done, total }));
       saveFamilyZip(family.family, zipped);
-      setState({ kind: "idle" });
+      setState({ kind: "done" });
     } catch {
       setState({ kind: "error" });
     }
@@ -37,17 +38,22 @@ export default function FavoriteDownload({ slug, name }: FavoriteDownloadProps) 
   if (state.kind === "fetching") label = "Preparing…";
   if (state.kind === "progress") label = `Preparing ${state.done}/${state.total}…`;
 
+  // The family name is not in the visible label, so it is announced with the button as sr-only text.
+  // Progress and completion go to the polite live region below.
+  let announcement = "";
+  if (state.kind === "fetching") announcement = `Preparing ${name} (.zip)…`;
+  if (state.kind === "progress") announcement = `Preparing ${name} (.zip), ${state.done} of ${state.total}…`;
+  if (state.kind === "done") announcement = `${name} (.zip) downloaded.`;
+
   return (
     <div className="flex flex-col gap-2">
-      <button
-        type="button"
-        onClick={handleClick}
-        disabled={busy}
-        aria-label={`Download ${name} (.zip)`}
-        className="btn btn-secondary"
-      >
+      <button type="button" onClick={handleClick} disabled={busy} className="btn btn-secondary">
         {label}
+        <span className="sr-only"> {name} (.zip)</span>
       </button>
+      <p aria-live="polite" className="sr-only">
+        {announcement}
+      </p>
       {state.kind === "error" && (
         <p role="alert" className="text-sm text-ink">
           Download failed. Try again.

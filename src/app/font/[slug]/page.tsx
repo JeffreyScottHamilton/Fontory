@@ -142,6 +142,7 @@ export default async function FontDetailPage({ params }: PageProps) {
         subsets={f.subsets}
         weight={preview.previewWeight}
         style={preview.previewStyle}
+        styles={f.styles}
       />
 
       <UseOnWeb

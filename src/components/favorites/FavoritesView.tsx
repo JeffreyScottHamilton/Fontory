@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useSyncExternalStore } from "react";
 import FavoriteRow from "@/components/favorites/FavoriteRow";
 import PreviewControls from "@/components/PreviewControls";
 import { removeFavorite, useFavorites } from "@/lib/favorites";
@@ -25,6 +25,10 @@ export default function FavoritesView({ index }: FavoritesViewProps) {
   const favorites = useFavorites();
   const mounted = useMounted();
   const [preview] = usePreview();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  // Where focus goes after a removal unmounts the row: a row's slug, or null for the page heading.
+  const pendingFocus = useRef<{ slug: string | null } | null>(null);
 
   const fonts = useMemo(() => {
     const bySlug = new Map(index.map((entry) => [entry.slug, entry]));
@@ -36,15 +40,38 @@ export default function FavoritesView({ index }: FavoritesViewProps) {
     return out;
   }, [index, favorites]);
 
+  // Once the removed row has unmounted, move focus to the next row's Remove, else the previous row's, else the heading.
+  useEffect(() => {
+    const target = pendingFocus.current;
+    if (!target) return;
+    pendingFocus.current = null;
+    const button = target.slug
+      ? containerRef.current?.querySelector<HTMLButtonElement>(`[data-remove-slug="${CSS.escape(target.slug)}"]`)
+      : null;
+    (button ?? headingRef.current)?.focus();
+  }, [fonts, favorites]);
+
+  function removeOne(slug: string) {
+    const at = fonts.findIndex((font) => font.slug === slug);
+    const neighbour = fonts[at + 1] ?? fonts[at - 1];
+    pendingFocus.current = { slug: neighbour?.slug ?? null };
+    removeFavorite(slug);
+  }
+
   function clearAll() {
     if (!window.confirm(`Remove all ${favorites.length} favorites from this browser?`)) return;
+    pendingFocus.current = { slug: null };
     for (const slug of favorites) removeFavorite(slug);
   }
 
   return (
-    <div className="flex flex-col">
+    <div ref={containerRef} className="flex flex-col">
       <header className="flex flex-col gap-3 pb-8 md:pb-10">
-        <h1 className="font-display text-[clamp(3.5rem,9vw,6.5rem)] leading-[0.95] font-normal tracking-[-0.035em] text-ink">
+        <h1
+          ref={headingRef}
+          tabIndex={-1}
+          className="font-display text-[clamp(3.5rem,9vw,6.5rem)] leading-[0.95] font-normal tracking-[-0.035em] text-ink"
+        >
           Favorites
         </h1>
         {mounted && fonts.length > 0 && (
@@ -84,7 +111,7 @@ export default function FavoritesView({ index }: FavoritesViewProps) {
         <ul className="flex flex-col border-b border-rule">
           {fonts.map((font) => (
             <li key={font.slug} className="border-t border-rule">
-              <FavoriteRow font={font} text={preview.text} size={preview.size} />
+              <FavoriteRow font={font} text={preview.text} size={preview.size} onRemove={removeOne} />
             </li>
           ))}
         </ul>
