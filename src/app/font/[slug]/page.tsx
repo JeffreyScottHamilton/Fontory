@@ -9,27 +9,66 @@ import DetailPreview from "@/components/detail/DetailPreview";
 import InfoPanel from "@/components/detail/InfoPanel";
 import UseOnWeb from "@/components/detail/UseOnWeb";
 import { axesText, weightsText } from "@/components/detail/format";
-import { getAllFamilies, getFamily, getIndex, toIndexEntry } from "@/lib/data";
+import { getFamily, getIndex, toIndexEntry } from "@/lib/data";
 import { cssSnippet } from "@/lib/google-css";
 import type { FontIndexEntry } from "@/lib/types";
 
-export const dynamicParams = false;
+// Only these pages are prerendered at build time. Other slugs render on first request
+// and are cached indefinitely (revalidate = false). Unknown slugs return 404 via notFound().
+// Keep in sync with the list in src/app/api/family/[slug]/route.ts.
+const PRERENDER_SLUGS = [
+  "inter",
+  "roboto",
+  "playfair-display",
+  "jetbrains-mono",
+  "fira-code",
+  "ibm-plex-sans",
+  "open-sans",
+  "lato",
+  "montserrat",
+  "poppins",
+  "source-sans-3",
+  "raleway",
+  "merriweather",
+  "lora",
+  "nunito",
+  "oswald",
+  "space-grotesk",
+  "dm-sans",
+  "work-sans",
+  "pt-sans",
+  "noto-sans",
+  "roboto-mono",
+  "source-code-pro",
+  "ubuntu",
+];
+
+// force-static is the documented way to get ISR for paths generated at runtime (see
+// generateStaticParams docs). This page reads no cookies, headers or search params.
+export const dynamic = "force-static";
+export const dynamicParams = true;
+export const revalidate = false;
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
 export function generateStaticParams() {
-  return getAllFamilies().map((f) => ({ slug: f.slug }));
+  return PRERENDER_SLUGS.filter((slug) => getFamily(slug) !== undefined).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const f = getFamily(slug);
   if (!f) return {};
+  const description = `${f.family} by ${f.designer} — ${f.licenseName}. Preview and download.`;
   return {
     title: f.family,
-    description: `${f.family} by ${f.designer} — ${f.licenseName}. Preview and download.`,
+    description,
+    openGraph: {
+      title: `${f.family} — Fontory`,
+      description,
+    },
   };
 }
 

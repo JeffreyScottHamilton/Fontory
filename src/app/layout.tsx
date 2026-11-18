@@ -1,15 +1,30 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
+import { siteUrl } from "@/lib/site-url";
 import "./globals.css";
 
+const DESCRIPTION =
+  "Discover, preview and download open-licensed fonts from the Google Fonts collection.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl()),
   title: {
     template: "%s — Fontory",
     default: "Fontory — Find your type.",
   },
-  description:
-    "Discover, preview and download open-licensed fonts from the Google Fonts collection.",
+  description: DESCRIPTION,
+  openGraph: {
+    type: "website",
+    siteName: "Fontory",
+    title: "Fontory — Find your type.",
+    description: DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Fontory — Find your type.",
+    description: DESCRIPTION,
+  },
 };
 
 export const viewport: Viewport = {
