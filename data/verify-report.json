@@ -1,0 +1,188 @@
+{
+  "checkedAt": "2026-11-18T21:01:07.670Z",
+  "commit": "5bd87dfc525c8a0d1d8529d3684716e00c3fc59a",
+  "families": 1993,
+  "stylesChecked": 3693,
+  "failedFamilies": [
+    {
+      "family": "Alumni Sans Collegiate One SC",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Batang",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "BatangChe",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Betania Patmos Guide Line",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Bhavuka",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Big Shoulders Display SC",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Big Shoulders Inline Display SC",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Big Shoulders Inline Text SC",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Big Shoulders Stencil Display SC",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Big Shoulders Stencil Text SC",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Big Shoulders Text SC",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Bungee Color",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Digital Numbers",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "DotumChe",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Fragment Mono SC",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Geist Serif",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "GulimChe",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Gungsuh",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "GungsuhChe",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Hermeneus One",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Hind Colombo",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Hind Jalandhar",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Hind Kochi",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Madhuban",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Merge One",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Mervale Script",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Miama",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "NATS",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Nevermind",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Noto Color Emoji Compat Test",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Porter Sans Block",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Signika Negative SC",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Signika SC",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Sitara",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Strong",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Yaldevi Colombo",
+      "reason": "css2 preview HTTP 400"
+    },
+    {
+      "family": "Yinmar",
+      "reason": "css2 preview HTTP 400"
+    }
+  ],
+  "upstreamLicenses": [
+    {
+      "repo": "IBM/plex",
+      "branch": "master",
+      "file": "LICENSE.txt",
+      "firstLine": "Copyright © 2017 IBM Corp. with Reserved Font Name \"Plex\""
+    },
+    {
+      "repo": "rsms/inter",
+      "branch": "master",
+      "file": "LICENSE.txt",
+      "firstLine": "Copyright (c) 2016 The Inter Project Authors (https://github.com/rsms/inter)"
+    },
+    {
+      "repo": "tonsky/FiraCode",
+      "branch": "master",
+      "file": "LICENSE",
+      "firstLine": "Copyright (c) 2014, The Fira Code Project Authors (https://github.com/tonsky/FiraCode)"
+    },
+    {
+      "repo": "JetBrains/JetBrainsMono",
+      "branch": "master",
+      "file": "OFL.txt",
+      "firstLine": "Copyright 2020 The JetBrains Mono Project Authors (https://github.com/JetBrains/JetBrainsMono)"
+    },
+    {
+      "repo": "fontsource/fontsource",
+      "branch": "main",
+      "file": "LICENSE",
+      "firstLine": "MIT License"
+    }
+  ]
+}

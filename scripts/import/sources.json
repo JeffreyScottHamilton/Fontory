@@ -1,0 +1,13 @@
+{
+  "googleFonts": {
+    "repo": "google/fonts",
+    "commit": "5bd87dfc525c8a0d1d8529d3684716e00c3fc59a"
+  },
+  "upstreams": [
+    { "repo": "IBM/plex" },
+    { "repo": "rsms/inter" },
+    { "repo": "tonsky/FiraCode" },
+    { "repo": "JetBrains/JetBrainsMono" },
+    { "repo": "fontsource/fontsource" }
+  ]
+}

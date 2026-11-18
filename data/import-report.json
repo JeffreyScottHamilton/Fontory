@@ -1,0 +1,305 @@
+{
+  "generatedAt": "2026-11-18T21:01:09.690Z",
+  "commit": "5bd87dfc525c8a0d1d8529d3684716e00c3fc59a",
+  "totals": {
+    "families": 1993,
+    "styles": 3693,
+    "byLicense": {
+      "OFL": 1954,
+      "APACHE2": 36,
+      "UFL": 3
+    },
+    "byCategory": {
+      "serif": 358,
+      "sans-serif": 756,
+      "handwriting": 353,
+      "display": 500,
+      "monospace": 52,
+      "retro": 665,
+      "gothic": 20,
+      "pixel": 43,
+      "decorative": 55
+    }
+  },
+  "excluded": [
+    {
+      "repoPath": "apache/jsmathcmbx10",
+      "reason": "license file LICENSE.txt missing in repo dir"
+    },
+    {
+      "repoPath": "apache/jsmathcmex10",
+      "reason": "license file LICENSE.txt missing in repo dir"
+    },
+    {
+      "repoPath": "apache/jsmathcmmi10",
+      "reason": "license file LICENSE.txt missing in repo dir"
+    },
+    {
+      "repoPath": "apache/jsmathcmr10",
+      "reason": "license file LICENSE.txt missing in repo dir"
+    },
+    {
+      "repoPath": "apache/jsmathcmsy10",
+      "reason": "license file LICENSE.txt missing in repo dir"
+    },
+    {
+      "repoPath": "apache/jsmathcmti10",
+      "reason": "license file LICENSE.txt missing in repo dir"
+    },
+    {
+      "repoPath": "ofl/alumnisanscollegiateonesc",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/batang",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/batangche",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/betaniapatmosguideline",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/bhavuka",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/bigshouldersdisplaysc",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/bigshouldersinlinedisplaysc",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/bigshouldersinlinetextsc",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/bigshouldersstencildisplaysc",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/bigshouldersstenciltextsc",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/bigshoulderstextsc",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/bungeecolor",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/digitalnumbers",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/dotumche",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/fragmentmonosc",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/geistserif",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/gulimche",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/gungsuh",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/gungsuhche",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/hermeneusone",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/hindcolombo",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/hindjalandhar",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/hindkochi",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/kumaroneoutline",
+      "reason": "license file OFL.txt missing in repo dir"
+    },
+    {
+      "repoPath": "ofl/madhuban",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/mergeone",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/mervalescript",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/miama",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/mplusrounded1c",
+      "reason": "license file OFL.txt missing in repo dir"
+    },
+    {
+      "repoPath": "ofl/nats",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/nevermind",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/notocoloremojicompattest",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/playwritenzbasicguides",
+      "reason": "license file OFL.txt missing in repo dir"
+    },
+    {
+      "repoPath": "ofl/portersansblock",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/signikanegativesc",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/signikasc",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/sitara",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/strong",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/tinos",
+      "reason": "license file OFL.txt missing in repo dir"
+    },
+    {
+      "repoPath": "ofl/yaldevicolombo",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ofl/yinmar",
+      "reason": "verify: css2 preview HTTP 400"
+    },
+    {
+      "repoPath": "ufl/ubuntusans",
+      "reason": "license file UFL.txt missing in repo dir"
+    },
+    {
+      "repoPath": "ufl/ubuntusansmono",
+      "reason": "license file UFL.txt missing in repo dir"
+    }
+  ],
+  "duplicates": [
+    {
+      "repoPath": "ofl/intelonemono",
+      "family": "Intel One Mono",
+      "slug": "intel-one-mono",
+      "keptRepoPath": "ofl/intelonemono",
+      "reason": "duplicate style/weight file dropped: IntelOneMono[wght].ttf"
+    },
+    {
+      "repoPath": "ofl/intelonemono",
+      "family": "Intel One Mono",
+      "slug": "intel-one-mono",
+      "keptRepoPath": "ofl/intelonemono",
+      "reason": "duplicate style/weight file dropped: IntelOneMono-Italic[wght].ttf"
+    },
+    {
+      "repoPath": "ofl/wixmadefortext",
+      "family": "Wix Madefor Text",
+      "slug": "wix-madefor-text",
+      "keptRepoPath": "ofl/wixmadefortext",
+      "reason": "duplicate style/weight file dropped: WixMadeforText[wght].ttf"
+    },
+    {
+      "repoPath": "ofl/wixmadefortext",
+      "family": "Wix Madefor Text",
+      "slug": "wix-madefor-text",
+      "keptRepoPath": "ofl/wixmadefortext",
+      "reason": "duplicate style/weight file dropped: WixMadeforText-Italic[wght].ttf"
+    }
+  ],
+  "upstreams": [
+    {
+      "repo": "IBM/plex",
+      "coveredBy": [],
+      "licenseCheck": {
+        "file": "LICENSE.txt",
+        "branch": "master",
+        "firstLine": "Copyright © 2017 IBM Corp. with Reserved Font Name \"Plex\""
+      }
+    },
+    {
+      "repo": "rsms/inter",
+      "coveredBy": [
+        "Inter"
+      ],
+      "licenseCheck": {
+        "file": "LICENSE.txt",
+        "branch": "master",
+        "firstLine": "Copyright (c) 2016 The Inter Project Authors (https://github.com/rsms/inter)"
+      }
+    },
+    {
+      "repo": "tonsky/FiraCode",
+      "coveredBy": [
+        "Fira Code"
+      ],
+      "licenseCheck": {
+        "file": "LICENSE",
+        "branch": "master",
+        "firstLine": "Copyright (c) 2014, The Fira Code Project Authors (https://github.com/tonsky/FiraCode)"
+      }
+    },
+    {
+      "repo": "JetBrains/JetBrainsMono",
+      "coveredBy": [
+        "JetBrains Mono"
+      ],
+      "licenseCheck": {
+        "file": "OFL.txt",
+        "branch": "master",
+        "firstLine": "Copyright 2020 The JetBrains Mono Project Authors (https://github.com/JetBrains/JetBrainsMono)"
+      }
+    },
+    {
+      "repo": "fontsource/fontsource",
+      "coveredBy": [],
+      "licenseCheck": {
+        "file": "LICENSE",
+        "branch": "main",
+        "firstLine": "MIT License"
+      }
+    }
+  ]
+}
