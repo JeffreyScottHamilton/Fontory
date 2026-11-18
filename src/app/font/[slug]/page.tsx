@@ -39,12 +39,28 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const f = getFamily(slug);
   if (!f) return {};
   const description = `${f.family} by ${f.designer} — ${f.licenseName}. Preview and download.`;
+  const title = `${f.family} — Fontory`;
+  const url = `/font/${slug}`;
+  // openGraph/twitter here replace the layout's objects entirely, so the root image,
+  // site name and type are repeated explicitly.
+  const images = ["/opengraph-image"];
   return {
     title: f.family,
     description,
+    alternates: { canonical: url },
     openGraph: {
-      title: `${f.family} — Fontory`,
+      title,
       description,
+      url,
+      type: "website",
+      siteName: "Fontory",
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images,
     },
   };
 }

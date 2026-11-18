@@ -12,7 +12,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: `${base}/`, changeFrequency: "weekly", priority: 1 },
     { url: `${base}/compare`, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${base}/favorites`, changeFrequency: "monthly", priority: 0.3 },
     ...fonts,
   ];
 }

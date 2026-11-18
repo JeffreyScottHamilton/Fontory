@@ -12,6 +12,12 @@ describe("siteUrl", () => {
     expect(siteUrl()).toBe("https://fonts.example.com");
   });
 
+  it("prefixes https:// when NEXT_PUBLIC_SITE_URL has no scheme", () => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "fontory.app/");
+    vi.stubEnv("VERCEL_PROJECT_PRODUCTION_URL", "");
+    expect(siteUrl()).toBe("https://fontory.app");
+  });
+
   it("falls back to VERCEL_PROJECT_PRODUCTION_URL as a bare host", () => {
     vi.stubEnv("NEXT_PUBLIC_SITE_URL", "");
     vi.stubEnv("VERCEL_PROJECT_PRODUCTION_URL", "fontory.vercel.app/");
