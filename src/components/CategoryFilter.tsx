@@ -26,8 +26,8 @@ export default function CategoryFilter({ selected, onChange, counts }: CategoryF
             onClick={() => toggle(category.id)}
             className={
               active
-                ? "inline-flex items-center gap-2 border border-ink bg-ink px-3 py-1.5 text-sm text-ground"
-                : "inline-flex items-center gap-2 border border-rule px-3 py-1.5 text-sm text-ink hover:border-ink"
+                ? "inline-flex min-h-11 items-center gap-2 border border-ink bg-ink px-3 py-1.5 text-sm text-ground"
+                : "inline-flex min-h-11 items-center gap-2 border border-rule px-3 py-1.5 text-sm text-ink hover:border-ink"
             }
           >
             {category.label}
