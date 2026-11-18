@@ -53,14 +53,10 @@ export default function CopyCssButton({ text, label = "Copy CSS" }: CopyCssButto
 
   return (
     <div className="inline-flex items-center gap-3">
-      <button
-        type="button"
-        onClick={handleClick}
-        className="inline-flex items-center border border-rule px-3 py-1.5 text-sm text-ink hover:border-ink"
-      >
+      <button type="button" onClick={handleClick} className="btn btn-secondary">
         {label}
       </button>
-      <span aria-live="polite" className="text-sm text-muted">
+      <span aria-live="polite" className="font-mono text-[12px] text-muted">
         {copied ? "Copied" : ""}
       </span>
     </div>

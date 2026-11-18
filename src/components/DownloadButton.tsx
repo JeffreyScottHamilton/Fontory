@@ -89,7 +89,7 @@ export default function DownloadButton({
         type="button"
         onClick={handleClick}
         disabled={busy}
-        className="inline-flex min-h-11 items-center justify-center border border-ink bg-ink px-4 py-2.5 text-sm font-medium text-ground hover:opacity-90 disabled:opacity-60"
+        className="btn btn-primary"
       >
         {state.kind === "progress" ? `Preparing ${state.done}/${state.total}…` : "Download family (.zip)"}
       </button>
@@ -107,7 +107,7 @@ export function StyleDownloadLink({ style }: { style: FontStyle }) {
     <a
       href={style.url}
       download={style.filename}
-      className="inline-flex min-h-11 items-center border border-rule px-3 py-1.5 text-sm text-ink hover:border-ink"
+      className="btn btn-secondary"
     >
       Download {style.weight} {style.style}
     </a>

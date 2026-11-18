@@ -19,6 +19,13 @@ describe("parseHomeParams", () => {
     expect(parseHomeParams("?sort=styles").sort).toBe("styles");
   });
 
+  it("reads the view and falls back to grid for unknown values", () => {
+    expect(parseHomeParams("?view=list").view).toBe("list");
+    expect(parseHomeParams("?view=grid").view).toBe("grid");
+    expect(parseHomeParams("?view=cards").view).toBe("grid");
+    expect(parseHomeParams("").view).toBe("grid");
+  });
+
   it("caps the query length", () => {
     expect(parseHomeParams(`?q=${"a".repeat(500)}`).q).toHaveLength(200);
   });
@@ -29,6 +36,11 @@ describe("buildHomeSearch", () => {
     expect(buildHomeSearch(DEFAULT_HOME_STATE)).toBe("");
   });
 
+  it("writes view=list only when the list view is chosen", () => {
+    expect(buildHomeSearch({ ...DEFAULT_HOME_STATE, view: "list" })).toBe("view=list");
+    expect(buildHomeSearch({ ...DEFAULT_HOME_STATE, view: "grid" })).toBe("");
+  });
+
   it("round-trips non-default state with categories in canonical order", () => {
     const state = {
       q: "  inter ",
@@ -36,9 +48,10 @@ describe("buildHomeSearch", () => {
       italic: true,
       variable: true,
       sort: "newest" as const,
+      view: "list" as const,
     };
     const search = buildHomeSearch(state);
-    expect(search).toBe("q=inter&c=serif%2Cpixel&italic=1&variable=1&sort=newest");
+    expect(search).toBe("q=inter&c=serif%2Cpixel&italic=1&variable=1&sort=newest&view=list");
     expect(parseHomeParams(`?${search}`)).toEqual({ ...state, q: "inter" });
   });
 });

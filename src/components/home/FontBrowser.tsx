@@ -15,22 +15,65 @@ import {
   isSortKey,
   parseHomeParams,
   type HomeState,
+  type HomeView,
 } from "@/components/home/url-state";
 
 const PAGE_SIZE = 36;
 
-const INPUT_CLASS =
-  "min-h-11 w-full border border-rule bg-ground px-3 text-base text-ink placeholder:text-muted";
 const SORT_LABEL: Record<SortKey, string> = {
   az: "A–Z",
   newest: "Newest",
   styles: "Most styles",
 };
 
+const VIEW_LABEL: Record<HomeView, string> = {
+  grid: "Grid",
+  list: "List",
+};
+
+// Chip look shared by the italic / variable toggles (same as CategoryFilter chips).
 function toggleClass(active: boolean): string {
-  return active
-    ? "inline-flex min-h-11 items-center border border-ink bg-ink px-3 text-sm text-ground"
-    : "inline-flex min-h-11 items-center border border-rule px-3 text-sm text-ink hover:border-ink";
+  return `inline-flex min-h-11 shrink-0 items-center rounded-[2px] border px-3.5 text-sm font-medium transition-colors duration-150 ${
+    active ? "border-ink bg-ink text-ground" : "border-rule text-ink hover:border-ink"
+  }`;
+}
+
+function SearchIcon() {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width="16"
+      height="16"
+      aria-hidden="true"
+      focusable="false"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.25}
+      strokeLinecap="round"
+      className="pointer-events-none absolute top-1/2 left-0 -translate-y-1/2 text-muted"
+    >
+      <circle cx="7" cy="7" r="4.75" />
+      <path d="M10.5 10.5 14 14" />
+    </svg>
+  );
+}
+
+function ChevronIcon() {
+  return (
+    <svg
+      viewBox="0 0 12 12"
+      width="12"
+      height="12"
+      aria-hidden="true"
+      focusable="false"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.25}
+      className="pointer-events-none absolute top-1/2 right-0 -translate-y-1/2 text-ink"
+    >
+      <path d="M2 4.25 6 8l4-3.75" />
+    </svg>
+  );
 }
 
 /**
@@ -147,109 +190,179 @@ export default function FontBrowser({ index }: FontBrowserProps) {
 
   const queryText = filters.q.trim();
   const count = results.length;
-  const countLabel = count === 1 ? "1 family" : `${count} families`;
+  const countLabel = count === 1 ? "1 family" : `${count.toLocaleString("en-US")} families`;
+
+  const filtersActive =
+    queryText !== "" || filters.categories.length > 0 || filters.italic || filters.variable;
+  const summaryParts = [
+    queryText ? `“${queryText}”` : null,
+    filters.categories.length > 0
+      ? CATEGORIES.filter((c) => filters.categories.includes(c.id))
+          .map((c) => c.label)
+          .join(", ")
+      : null,
+    filters.italic ? "Italics" : null,
+    filters.variable ? "Variable" : null,
+  ].filter(Boolean);
+  const clearFilters = () => patch({ q: "", categories: [], italic: false, variable: false });
 
   return (
-    <section aria-label="Browse fonts" className="flex flex-col gap-8">
+    <section aria-label="Browse fonts" className="flex flex-col gap-6">
       <Suspense fallback={null}>
         <UrlSearchSync onSearch={onUrlSearch} />
       </Suspense>
-      <div className="grid gap-6 border-y border-rule py-6">
-        <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_14rem] sm:items-end">
-          <div className="flex min-w-0 flex-col gap-1">
-            <label htmlFor={searchId} className="text-sm text-muted">
+      <div className="flex flex-col gap-5 border-y border-rule py-4 md:sticky md:top-16 md:z-30 md:-mx-8 md:bg-ground md:px-8 md:py-3 xl:-mx-12 xl:px-12">
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:gap-6">
+          <div className="flex min-w-0 flex-1 flex-col gap-1">
+            <label htmlFor={searchId} className="label-mono">
               Search fonts
             </label>
-            <input
-              ref={searchRef}
-              id={searchId}
-              type="search"
-              value={filters.q}
-              placeholder="Search by name or designer"
-              autoComplete="off"
-              onChange={(e) => patch({ q: e.target.value.slice(0, 200) })}
-              className={INPUT_CLASS}
-            />
+            <div className="relative">
+              <SearchIcon />
+              <input
+                ref={searchRef}
+                id={searchId}
+                type="search"
+                value={filters.q}
+                placeholder="Search by name or designer"
+                autoComplete="off"
+                onChange={(e) => patch({ q: e.target.value.slice(0, 200) })}
+                className="field pl-7 pr-10"
+              />
+              <kbd
+                aria-hidden="true"
+                className="pointer-events-none absolute top-1/2 right-0 hidden -translate-y-1/2 rounded-[2px] border border-rule px-1.5 font-mono text-[11px] leading-5 text-muted md:inline-block"
+              >
+                /
+              </kbd>
+            </div>
           </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor={sortId} className="text-sm text-muted">
+
+          <PreviewControls compact className="md:flex-[1.4]" />
+
+          <div className="flex w-full flex-col gap-1 md:w-44 md:shrink-0">
+            <label htmlFor={sortId} className="label-mono">
               Sort
             </label>
-            <select
-              id={sortId}
-              value={filters.sort}
-              onChange={(e) => {
-                const value = e.target.value;
-                patch({ sort: isSortKey(value) ? value : DEFAULT_HOME_STATE.sort });
-              }}
-              className={INPUT_CLASS}
-            >
-              {SORT_KEYS.map((key) => (
-                <option key={key} value={key}>
-                  {SORT_LABEL[key]}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                id={sortId}
+                value={filters.sort}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  patch({ sort: isSortKey(value) ? value : DEFAULT_HOME_STATE.sort });
+                }}
+                className="field"
+              >
+                {SORT_KEYS.map((key) => (
+                  <option key={key} value={key}>
+                    {SORT_LABEL[key]}
+                  </option>
+                ))}
+              </select>
+              <ChevronIcon />
+            </div>
+          </div>
+
+          <div className="flex w-full flex-col gap-1 md:w-auto md:shrink-0">
+            <span className="label-mono" aria-hidden="true">
+              View
+            </span>
+            <div role="group" aria-label="View" className="flex h-11 items-stretch border border-rule">
+              {(Object.keys(VIEW_LABEL) as HomeView[]).map((view) => {
+                const active = filters.view === view;
+                return (
+                  <button
+                    key={view}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => patch({ view })}
+                    className={`flex flex-1 items-center justify-center px-4 text-sm font-medium transition-colors duration-150 md:flex-initial ${
+                      active ? "bg-ink text-ground" : "text-ink hover:bg-ground-2"
+                    }`}
+                  >
+                    {VIEW_LABEL[view]}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
-
-        <div className="flex flex-col gap-3">
-          <div className="[&_button]:min-h-11">
-            <CategoryFilter
-              selected={filters.categories}
-              onChange={(next) => patch({ categories: CATEGORIES.map((c) => c.id).filter((id) => next.includes(id)) })}
-              counts={categoryCounts}
-            />
-          </div>
-          <div className="flex flex-wrap gap-2" role="group" aria-label="Styles">
-            <button
-              type="button"
-              aria-pressed={filters.italic}
-              onClick={() => patch({ italic: !filters.italic })}
-              className={toggleClass(filters.italic)}
-            >
-              Italics
-            </button>
-            <button
-              type="button"
-              aria-pressed={filters.variable}
-              onClick={() => patch({ variable: !filters.variable })}
-              className={toggleClass(filters.variable)}
-            >
-              Variable
-            </button>
-          </div>
-        </div>
-
-        <PreviewControls />
       </div>
 
-      <p aria-live="polite" className="text-sm text-muted tabular-nums">
-        {countLabel}
-      </p>
+      <div className="flex flex-col gap-3">
+        <CategoryFilter
+          selected={filters.categories}
+          onChange={(next) => patch({ categories: CATEGORIES.map((c) => c.id).filter((id) => next.includes(id)) })}
+          counts={categoryCounts}
+        />
+        <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 md:mx-0 md:flex-wrap md:overflow-visible md:px-0" role="group" aria-label="Styles">
+          <button
+            type="button"
+            aria-pressed={filters.italic}
+            onClick={() => patch({ italic: !filters.italic })}
+            className={toggleClass(filters.italic)}
+          >
+            Italics
+          </button>
+          <button
+            type="button"
+            aria-pressed={filters.variable}
+            onClick={() => patch({ variable: !filters.variable })}
+            className={toggleClass(filters.variable)}
+          >
+            Variable
+          </button>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-rule pb-3">
+        <p aria-live="polite" className="font-mono text-[13px] tabular-nums text-ink">
+          {countLabel}
+        </p>
+        {(summaryParts.length > 0 || filtersActive) && (
+          <div className="flex min-w-0 flex-wrap items-baseline gap-x-4 gap-y-1 text-sm text-muted">
+            {summaryParts.length > 0 && <span className="min-w-0 break-words">{summaryParts.join(" · ")}</span>}
+            {filtersActive && (
+              <button type="button" onClick={clearFilters} className="btn btn-tertiary text-ink">
+                Clear
+              </button>
+            )}
+          </div>
+        )}
+      </div>
 
       {count === 0 ? (
         <div className="flex flex-col items-start gap-4 py-12">
-          <p className="text-lg text-ink">
+          <p className="font-display text-3xl leading-tight text-ink">
             {queryText ? `No fonts match “${queryText}”.` : "No fonts match the selected filters."}
           </p>
           <button
             type="button"
-            onClick={() => patch({ q: "", categories: [], italic: false, variable: false })}
-            className="inline-flex min-h-11 items-center border border-ink px-4 text-sm text-ink hover:bg-ink hover:text-ground"
+            onClick={clearFilters}
+            className="btn btn-secondary"
           >
             Clear search and filters
           </button>
         </div>
       ) : (
         <>
-          <ul className="grid grid-cols-1 border-t border-rule md:grid-cols-2 xl:grid-cols-3">
+          {/* Grid: cells share hairlines (container draws top and left, each cell draws right and bottom). */}
+          <ul
+            className={
+              filters.view === "list"
+                ? "grid grid-cols-1 border-t border-rule"
+                : "grid grid-cols-1 border-t border-l border-rule md:grid-cols-2 xl:grid-cols-3"
+            }
+          >
             {shown.map((font) => (
               <li
                 key={font.slug}
-                className="min-w-0 border-b border-rule px-4 [&>article]:border-b-0 md:[&:nth-child(2n+1)]:border-r xl:[&:nth-child(2n+1)]:border-r-0 xl:[&:nth-child(3n+1)]:border-r xl:[&:nth-child(3n+2)]:border-r"
+                className={
+                  filters.view === "list" ? "min-w-0 border-b border-rule" : "min-w-0 border-r border-b border-rule"
+                }
               >
-                <FontCard font={font} text={preview.text} size={preview.size} />
+                <FontCard font={font} text={preview.text} size={preview.size} view={filters.view} />
               </li>
             ))}
           </ul>
@@ -260,7 +373,7 @@ export default function FontBrowser({ index }: FontBrowserProps) {
               <button
                 type="button"
                 onClick={() => setVisible((v) => v + PAGE_SIZE)}
-                className="inline-flex min-h-11 items-center border border-rule px-5 text-sm text-ink hover:border-ink"
+                className="btn btn-secondary"
               >
                 Show more
               </button>

@@ -5,6 +5,8 @@ import type { SortKey } from "@/lib/search";
 
 export const SORT_KEYS: readonly SortKey[] = ["az", "newest", "styles"];
 export const MAX_QUERY_LENGTH = 200;
+export type HomeView = "grid" | "list";
+export const VIEW_KEYS: readonly HomeView[] = ["grid", "list"];
 
 const CATEGORY_IDS: ReadonlySet<string> = new Set(CATEGORIES.map((c) => c.id));
 
@@ -14,6 +16,7 @@ export interface HomeState {
   italic: boolean;
   variable: boolean;
   sort: SortKey;
+  view: HomeView;
 }
 
 export const DEFAULT_HOME_STATE: HomeState = {
@@ -22,13 +25,14 @@ export const DEFAULT_HOME_STATE: HomeState = {
   italic: false,
   variable: false,
   sort: "az",
+  view: "grid",
 };
 
 export function isSortKey(value: unknown): value is SortKey {
   return typeof value === "string" && (SORT_KEYS as readonly string[]).includes(value);
 }
 
-/** Reads ?q=, ?c=, ?italic=1, ?variable=1, ?sort= and drops anything unknown. */
+/** Reads ?q=, ?c=, ?italic=1, ?variable=1, ?sort=, ?view= and drops anything unknown. */
 export function parseHomeParams(search: string): HomeState {
   const params = new URLSearchParams(search);
 
@@ -51,6 +55,7 @@ export function parseHomeParams(search: string): HomeState {
     italic: params.get("italic") === "1",
     variable: params.get("variable") === "1",
     sort,
+    view: params.get("view") === "list" ? "list" : "grid",
   };
 }
 
@@ -66,5 +71,6 @@ export function buildHomeSearch(state: HomeState): string {
   if (state.italic) params.set("italic", "1");
   if (state.variable) params.set("variable", "1");
   if (state.sort !== DEFAULT_HOME_STATE.sort) params.set("sort", state.sort);
+  if (state.view !== DEFAULT_HOME_STATE.view) params.set("view", state.view);
   return params.toString();
 }

@@ -30,7 +30,8 @@ test.describe("home", () => {
 
   test("a category filter narrows results and updates the live count", async ({ page }) => {
     await page.goto("/");
-    const countLabel = page.getByText(/^\d+ famil(?:y|ies)$/);
+    // Counts use thousands separators (1,993), so the pattern allows commas.
+    const countLabel = page.getByText(/^[\d,]+ famil(?:y|ies)$/);
     await expect(countLabel).toBeVisible();
     const before = await countLabel.textContent();
 
@@ -41,8 +42,8 @@ test.describe("home", () => {
     // The live count is a single status line; it must change and shrink.
     await expect(countLabel).not.toHaveText(before ?? "");
     const after = (await countLabel.textContent()) ?? "";
-    const beforeCount = Number.parseInt(before ?? "", 10);
-    const afterCount = Number.parseInt(after, 10);
+    const beforeCount = Number.parseInt((before ?? "").replace(/,/g, ""), 10);
+    const afterCount = Number.parseInt(after.replace(/,/g, ""), 10);
     expect(afterCount).toBeGreaterThan(0);
     expect(afterCount).toBeLessThan(beforeCount);
   });

@@ -2,12 +2,16 @@
 
 @theme {
   --color-ground: #f7f6f2;
+  --color-ground-2: #f0eee8;
   --color-ink: #141414;
   --color-muted: #5c5a55;
   --color-rule: #d9d6cf;
   --color-accent: #c2410c;
 
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Wired to next/font variables set on <html> in layout.tsx. */
+  --font-display: var(--font-newsreader), ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --radius-xs: 2px;
   --radius-sm: 2px;
@@ -27,6 +31,8 @@ body {
 
 body {
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
@@ -37,4 +43,197 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+}
+
+@layer components {
+  /* One container for header, main and footer: 1360px max, 16 / 32 / 48px gutters. */
+  .site-container {
+    width: 100%;
+    max-width: 1360px;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 48rem) {
+    .site-container {
+      padding-inline: 2rem;
+    }
+  }
+  @media (min-width: 80rem) {
+    .site-container {
+      padding-inline: 3rem;
+    }
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Mono uppercase label for metadata. Not for buttons. */
+  .label-mono {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  /* Buttons: 14px Geist medium, 2px radius, 44px target. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding-inline: 1rem;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    transition-property: background-color, color, border-color, opacity;
+    transition-duration: 150ms;
+    transition-timing-function: ease-out;
+  }
+  .btn:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+  .btn-primary {
+    background-color: var(--color-ink);
+    color: var(--color-ground);
+    border-color: var(--color-ink);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background-color: #333331;
+    border-color: #333331;
+  }
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-ink);
+    border-color: var(--color-ink);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background-color: var(--color-ink);
+    color: var(--color-ground);
+  }
+  .btn-tertiary {
+    min-height: 2.75rem;
+    padding-inline: 0;
+    background: transparent;
+    color: var(--color-ink);
+    text-decoration: none;
+    text-underline-offset: 4px;
+  }
+  .btn-tertiary:hover:not(:disabled) {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+  }
+
+  /* Text input: no box, bottom rule only. 16px so iOS does not zoom. */
+  .field {
+    display: block;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.5rem 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--color-rule);
+    border-radius: 0;
+    color: var(--color-ink);
+    font-size: 1rem;
+    line-height: 1.5rem;
+    appearance: none;
+    -webkit-appearance: none;
+    transition-property: border-color;
+    transition-duration: 150ms;
+    transition-timing-function: ease-out;
+  }
+  .field::placeholder {
+    color: var(--color-muted);
+    opacity: 1;
+  }
+  .field:focus {
+    outline-offset: 2px;
+    border-bottom-color: var(--color-ink);
+  }
+  .field:hover {
+    border-bottom-color: var(--color-muted);
+  }
+  .field:focus:hover {
+    border-bottom-color: var(--color-ink);
+  }
+  /* Search field hides the native clear glyph; the page has its own clear action. */
+  input[type="search"].field::-webkit-search-cancel-button,
+  input[type="search"].field::-webkit-search-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+    display: none;
+  }
+
+  /* Select: appearance none, bottom rule. The chevron is an inline SVG next to it. */
+  select.field {
+    padding-right: 1.75rem;
+    cursor: pointer;
+    text-overflow: ellipsis;
+  }
+}
+
+/* Range slider: 1px ink track, 14px square ink thumb. Both engines. */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2.75rem;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 0;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 1px;
+  background: var(--color-ink);
+  border: 0;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -6.5px;
+  background: var(--color-ink);
+  border: 0;
+  border-radius: 0;
+}
+input[type="range"]::-moz-range-track {
+  height: 1px;
+  background: var(--color-ink);
+  border: 0;
+}
+input[type="range"]::-moz-range-progress {
+  height: 1px;
+  background: var(--color-ink);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--color-ink);
+  border: 0;
+  border-radius: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }

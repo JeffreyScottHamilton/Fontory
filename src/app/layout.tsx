@@ -1,8 +1,28 @@
 import type { Metadata, Viewport } from "next";
-import Link from "next/link";
+import { Geist, Geist_Mono, Newsreader } from "next/font/google";
+import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { siteUrl } from "@/lib/site-url";
 import "./globals.css";
+
+// Self-hosted at build time. display swap keeps text visible while a face loads.
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  axes: ["opsz"],
+  display: "swap",
+  variable: "--font-newsreader",
+});
+const geist = Geist({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-geist",
+});
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-geist-mono",
+});
 
 const DESCRIPTION =
   "Discover, preview and download open-licensed fonts from the Google Fonts collection.";
@@ -37,22 +57,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${newsreader.variable} ${geist.variable} ${geistMono.variable}`}>
       <body className="flex min-h-screen flex-col antialiased">
         <SiteHeader />
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">{children}</main>
-        <footer className="border-t border-rule">
-          <p className="mx-auto max-w-6xl px-4 py-6 text-sm text-muted">
-            Fonts from the Google Fonts collection (
-            <Link
-              href="https://github.com/google/fonts"
-              className="underline underline-offset-2 hover:text-ink"
-            >
-              github.com/google/fonts
-            </Link>
-            ). Each family keeps its original license.
-          </p>
-        </footer>
+        <main className="site-container flex-1 py-10 md:py-14">{children}</main>
+        <SiteFooter />
       </body>
     </html>
   );
