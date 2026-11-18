@@ -1,0 +1,9 @@
+{
+  "group": "velvetyne",
+  "host": "gitlab",
+  "note": "Test fixture pins for velvetyne.test.ts. Not a real pin file.",
+  "projects": [
+    { "project": "fixture-ofl", "id": 1, "defaultBranch": "master", "sha": "cccccccccccccccccccccccccccccccccccccccc", "commitDate": "2024-03-04" },
+    { "project": "fixture-nonofl", "id": 2, "defaultBranch": "master", "sha": "dddddddddddddddddddddddddddddddddddddddd", "commitDate": "2024-03-05" }
+  ]
+}

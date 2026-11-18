@@ -1,0 +1,245 @@
+{
+  "group": "velvetyne",
+  "host": "gitlab",
+  "note": "Default-branch HEAD per project at pin time. Regenerate with scripts/import/fetch-velvetyne.sh --pin.",
+  "projects": [
+    {
+      "project": "amdal",
+      "id": 32740287,
+      "defaultBranch": "master",
+      "sha": "4896d186680c62d002702f4c17ac741038b3d905",
+      "commitDate": "2022-01-12"
+    },
+    {
+      "project": "anthony",
+      "id": 23593627,
+      "defaultBranch": "master",
+      "sha": "bf84739794cf48ff661f3ba6cee2dc38f3bc4710",
+      "commitDate": "2021-02-01"
+    },
+    {
+      "project": "Avara",
+      "id": 10355600,
+      "defaultBranch": "master",
+      "sha": "cb655944d819ff3636e35bc58407e2b30b36e6fe",
+      "commitDate": "2020-08-21"
+    },
+    {
+      "project": "backout",
+      "id": 13365710,
+      "defaultBranch": "master",
+      "sha": "4f894ca0bf7d46e12a1e818d24a1234660e5848b",
+      "commitDate": "2022-10-04"
+    },
+    {
+      "project": "basteleur",
+      "id": 24775944,
+      "defaultBranch": "master",
+      "sha": "f32302d63d46e9b996f329648b0f2df01c9190f5",
+      "commitDate": "2023-05-16"
+    },
+    {
+      "project": "cantique",
+      "id": 15497626,
+      "defaultBranch": "master",
+      "sha": "ff74dccdf7af6c3c4d1af70f44732ef87d75ce61",
+      "commitDate": "2020-03-10"
+    },
+    {
+      "project": "compagnon",
+      "id": 8260725,
+      "defaultBranch": "master",
+      "sha": "4f2344df5adb6eaf9ffd9215c5406c0729fb7aa1",
+      "commitDate": "2020-04-02"
+    },
+    {
+      "project": "Facade-font",
+      "id": 46503156,
+      "defaultBranch": "master",
+      "sha": "ee8aec96787b070239419632c8eecbf822df74eb",
+      "commitDate": "2023-06-30"
+    },
+    {
+      "project": "feroniapi",
+      "id": 76019933,
+      "defaultBranch": "main",
+      "sha": "4d94d4701ec463afee65da5228bba875f073eb54",
+      "commitDate": "2025-11-14"
+    },
+    {
+      "project": "flor-des-ruina",
+      "id": 77499518,
+      "defaultBranch": "main",
+      "sha": "5ddb2681fecc6050de609200f9498593fb9d52d9",
+      "commitDate": "2026-01-09"
+    },
+    {
+      "project": "format-1452",
+      "id": 13340225,
+      "defaultBranch": "master",
+      "sha": "4af715b8a873139975d2651f0e316604508635ff",
+      "commitDate": "2019-07-19"
+    },
+    {
+      "project": "fungal",
+      "id": 38850455,
+      "defaultBranch": "main",
+      "sha": "b5b58278bc903ea5f0fe015a59b07fa77e9c56ff",
+      "commitDate": "2022-11-18"
+    },
+    {
+      "project": "grotesk",
+      "id": 42536917,
+      "defaultBranch": "master",
+      "sha": "ac79fbc0f818fba94b61fb7f302e44ebc7a107bf",
+      "commitDate": "2023-01-13"
+    },
+    {
+      "project": "Gulax",
+      "id": 25502412,
+      "defaultBranch": "master",
+      "sha": "25ad92e48c142ad0f50c70f4fbaed3a44d93e37a",
+      "commitDate": "2021-03-29"
+    },
+    {
+      "project": "Happy-Times-at-the-IKOB",
+      "id": 7087616,
+      "defaultBranch": "master",
+      "sha": "0fc4cf5da8c67bd19c3b88b20f233a3564516427",
+      "commitDate": "2019-10-09"
+    },
+    {
+      "project": "imago-mundi-mei",
+      "id": 17143708,
+      "defaultBranch": "master",
+      "sha": "bde2ee5bc138f2dc31662c373e25595e98f18a2d",
+      "commitDate": "2020-03-06"
+    },
+    {
+      "project": "interlope",
+      "id": 74596720,
+      "defaultBranch": "main",
+      "sha": "1b7c0ef818ae62620c749de80ac35a05b04ba9bc",
+      "commitDate": "2025-10-01"
+    },
+    {
+      "project": "jgs",
+      "id": 39479733,
+      "defaultBranch": "main",
+      "sha": "b1fe344c6ab4cb97aa9ceb09ba3b6056f826b040",
+      "commitDate": "2023-05-30"
+    },
+    {
+      "project": "kaerukaeru",
+      "id": 13361703,
+      "defaultBranch": "master",
+      "sha": "dae804908ffb9249af2c4ee0b65a4a9084620de5",
+      "commitDate": "2019-07-17"
+    },
+    {
+      "project": "lack",
+      "id": 15365736,
+      "defaultBranch": "master",
+      "sha": "80e730e1f5f550a48cddcb1521f8a5767ffe7917",
+      "commitDate": "2020-08-23"
+    },
+    {
+      "project": "letters",
+      "id": 70041823,
+      "defaultBranch": "main",
+      "sha": "f402d42dcd6afc8f7c5f55bf4bbaae37643a69c5",
+      "commitDate": "2025-05-21"
+    },
+    {
+      "project": "lineal",
+      "id": 52830215,
+      "defaultBranch": "main",
+      "sha": "8dfea6601fdb5022ec38fc6d83de3cc44cb1bffa",
+      "commitDate": "2023-12-15"
+    },
+    {
+      "project": "Mess",
+      "id": 21445434,
+      "defaultBranch": "master",
+      "sha": "c0ec947a54d664c2b08bd5e9a7b7baf877a73423",
+      "commitDate": "2020-09-29"
+    },
+    {
+      "project": "mourier",
+      "id": 19783635,
+      "defaultBranch": "master",
+      "sha": "02c6e2d3aa23b3b8b625f50b7a912baa02e055f5",
+      "commitDate": "2020-11-05"
+    },
+    {
+      "project": "murmure",
+      "id": 8262589,
+      "defaultBranch": "main",
+      "sha": "7cfa8faf6ce6fe8d030410913b6147931cdc2ecb",
+      "commitDate": "2021-03-23"
+    },
+    {
+      "project": "ouroboros",
+      "id": 9147608,
+      "defaultBranch": "master",
+      "sha": "660bf83a5c6c5f3d500173e80fe51f74c046fdc2",
+      "commitDate": "2021-02-22"
+    },
+    {
+      "project": "pilowlava3D",
+      "id": 23169682,
+      "defaultBranch": "master",
+      "sha": "293fb716addefb73c6d80adf296f6c2ff748a495",
+      "commitDate": "2020-12-22"
+    },
+    {
+      "project": "sligoil",
+      "id": 35444113,
+      "defaultBranch": "main",
+      "sha": "d6d999088dff79d3fab81c5661e52f2caa2c479d",
+      "commitDate": "2026-06-10"
+    },
+    {
+      "project": "Sporting-Grotesque",
+      "id": 24865801,
+      "defaultBranch": "main",
+      "sha": "cf0a5a6350d61f9d299ca1c82f42f4c92dc2ff8c",
+      "commitDate": "2021-03-05"
+    },
+    {
+      "project": "Trickster",
+      "id": 24865810,
+      "defaultBranch": "master",
+      "sha": "751b1fa5fd5293614d0eb4df4962ec195fa243ab",
+      "commitDate": "2020-02-07"
+    },
+    {
+      "project": "velvetyne-libre-friends",
+      "id": 45045334,
+      "defaultBranch": "main",
+      "sha": "0d729149e6adb57717880ead7a6987478ea530f8",
+      "commitDate": "2025-03-29"
+    },
+    {
+      "project": "Velvetyne-Notdef",
+      "id": 11536703,
+      "defaultBranch": "master",
+      "sha": "a6f23a54224cb81fd11ea57644f65f6ce50a8b24",
+      "commitDate": "2019-03-27"
+    },
+    {
+      "project": "Velvetyne-Standard-Character-Set",
+      "id": 11536706,
+      "defaultBranch": "master",
+      "sha": "ecb6cdd0b9c48218f3d750bf778522f2a424e957",
+      "commitDate": "2018-04-10"
+    },
+    {
+      "project": "vg5000",
+      "id": 9249801,
+      "defaultBranch": "master",
+      "sha": "e4eeaed973f75fd5bafe2c69de60e8ad0f710f58",
+      "commitDate": "2018-11-11"
+    }
+  ]
+}
