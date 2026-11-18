@@ -15,9 +15,11 @@ interface FontPickerProps {
 export default function FontPicker({ label, index, onPick }: FontPickerProps) {
   const inputId = useId();
   const [query, setQuery] = useState("");
+  const searching = query.trim() !== "";
+  // The list only opens while there is a query, so the comparison stays above the fold.
   const results = useMemo(
-    () => filterFonts(index, { q: query, sort: "az" }).slice(0, RESULT_LIMIT),
-    [index, query],
+    () => (searching ? filterFonts(index, { q: query, sort: "az" }).slice(0, RESULT_LIMIT) : []),
+    [index, query, searching],
   );
 
   return (
@@ -35,7 +37,7 @@ export default function FontPicker({ label, index, onPick }: FontPickerProps) {
         onChange={(e) => setQuery(e.target.value)}
         className="w-full border border-rule bg-ground px-3 py-2 text-base text-ink placeholder:text-muted"
       />
-      {results.length > 0 ? (
+      {searching && results.length > 0 ? (
         <ul aria-label={`${label} results`} className="flex flex-col border border-rule">
           {results.map((entry) => (
             <li key={entry.slug} className="border-b border-rule last:border-b-0">
@@ -54,7 +56,7 @@ export default function FontPicker({ label, index, onPick }: FontPickerProps) {
           ))}
         </ul>
       ) : (
-        query.trim() !== "" && <p className="text-sm text-muted">No matching fonts.</p>
+        searching && <p className="text-sm text-muted">No matching fonts.</p>
       )}
     </div>
   );

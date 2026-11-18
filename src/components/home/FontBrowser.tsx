@@ -1,6 +1,7 @@
 "use client";
 
-import { useDeferredValue, useEffect, useId, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useDeferredValue, useEffect, useId, useMemo, useRef, useState } from "react";
 import CategoryFilter from "@/components/CategoryFilter";
 import FontCard from "@/components/FontCard";
 import PreviewControls from "@/components/PreviewControls";
@@ -32,6 +33,18 @@ function toggleClass(active: boolean): string {
     : "inline-flex min-h-11 items-center border border-rule px-3 text-sm text-ink hover:border-ink";
 }
 
+/**
+ * Reports the URL query whenever it changes, including same-path client navigations
+ * (for example the header "Browse" link from /?q=x). Renders nothing.
+ */
+function UrlSearchSync({ onSearch }: { onSearch: (search: string) => void }) {
+  const search = useSearchParams().toString();
+  useEffect(() => {
+    onSearch(search);
+  }, [search, onSearch]);
+  return null;
+}
+
 interface FontBrowserProps {
   index: FontIndexEntry[];
 }
@@ -39,6 +52,9 @@ interface FontBrowserProps {
 export default function FontBrowser({ index }: FontBrowserProps) {
   const [filters, setFilters] = useState<HomeState>(DEFAULT_HOME_STATE);
   const [ready, setReady] = useState(false);
+  // The query string this component last wrote to the URL (or read from it).
+  // Echoes of our own writes match it and are ignored.
+  const urlSearchRef = useRef("");
   const [visible, setVisible] = useState(PAGE_SIZE);
   const deferredQ = useDeferredValue(filters.q);
   const [preview] = usePreview();
@@ -48,22 +64,27 @@ export default function FontBrowser({ index }: FontBrowserProps) {
   const searchId = useId();
   const sortId = useId();
 
-  // Read the URL once on mount. Writing only starts after this, so the
-  // defaults from the first render never overwrite a shared link.
-  useEffect(() => {
-    // One-time sync from the browser URL (an external system), after hydration.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setFilters(parseHomeParams(window.location.search));
+  // The URL is read on mount and again on every client navigation. Writing only
+  // starts after the first read, so the defaults from the first render never
+  // overwrite a shared link. Our own writes are skipped as echoes.
+  const onUrlSearch = useCallback((search: string) => {
     setReady(true);
+    if (search === urlSearchRef.current) return;
+    urlSearchRef.current = search;
+    setFilters(parseHomeParams(search));
+    setVisible(PAGE_SIZE);
   }, []);
 
-  // Mirror state into the URL without navigation.
+  // Mirror state into the URL without navigation. replaceState does not scroll.
   useEffect(() => {
     if (!ready) return;
     const search = buildHomeSearch(filters);
     const next = `${window.location.pathname}${search ? `?${search}` : ""}`;
     const current = `${window.location.pathname}${window.location.search}`;
-    if (next !== current) window.history.replaceState(window.history.state, "", next);
+    if (next !== current) {
+      urlSearchRef.current = search;
+      window.history.replaceState(window.history.state, "", next);
+    }
   }, [ready, filters]);
 
   // "/" focuses search unless the user is already typing in a field.
@@ -130,6 +151,9 @@ export default function FontBrowser({ index }: FontBrowserProps) {
 
   return (
     <section aria-label="Browse fonts" className="flex flex-col gap-8">
+      <Suspense fallback={null}>
+        <UrlSearchSync onSearch={onUrlSearch} />
+      </Suspense>
       <div className="grid gap-6 border-y border-rule py-6">
         <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_14rem] sm:items-end">
           <div className="flex min-w-0 flex-col gap-1">

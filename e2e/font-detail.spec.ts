@@ -45,7 +45,7 @@ test.describe("font detail: Inter", () => {
       page.waitForEvent("download", { timeout: 90_000 }),
       button.click(),
     ]);
-    expect(download.suggestedFilename()).toBe("inter.zip");
+    expect(download.suggestedFilename()).toBe("Inter.zip");
 
     const path = await download.path();
     expect(path).toBeTruthy();

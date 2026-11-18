@@ -23,7 +23,6 @@ async function fetchBytes(url: string): Promise<Uint8Array> {
 
 export default function DownloadButton({
   family,
-  slug,
   styles,
   licenseFile,
   licenseUrl,
@@ -67,12 +66,13 @@ export default function DownloadButton({
         },
       };
 
-      const zipped = zipSync(entries);
+      // Font files barely compress, so store them (level 0) and keep the main thread free.
+      const zipped = zipSync(entries, { level: 0 });
       const blob = new Blob([zipped as BlobPart], { type: "application/zip" });
       const url = URL.createObjectURL(blob);
       const anchor = document.createElement("a");
       anchor.href = url;
-      anchor.download = `${slug}.zip`;
+      anchor.download = `${family}.zip`;
       document.body.appendChild(anchor);
       anchor.click();
       anchor.remove();

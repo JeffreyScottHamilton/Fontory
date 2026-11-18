@@ -6,7 +6,7 @@ import { styleLabel } from "@/components/detail/format";
 import { cssUrl } from "@/lib/google-css";
 import { MAX_SIZE, MIN_SIZE, usePreview } from "@/lib/preview";
 import type { FontStyle } from "@/lib/types";
-import { useFontReady, useFontStylesheet, type FontReadyStatus } from "@/lib/useFontStylesheet";
+import { useFontReady, useFontStylesheet, type FontReadyStatus, type StylesheetStatus } from "@/lib/useFontStylesheet";
 
 const INPUT_CLASS = "w-full border border-rule bg-ground px-3 py-2 text-base text-ink placeholder:text-muted";
 const ROW_MAX_SIZE = 40;
@@ -38,6 +38,7 @@ function StyleRow({
   size,
   isVariable,
   axesText,
+  sheet,
 }: {
   family: string;
   style: FontStyle;
@@ -45,8 +46,10 @@ function StyleRow({
   size: number;
   isVariable: boolean;
   axesText: string;
+  sheet: StylesheetStatus;
 }) {
-  const status = useFontReady(family, style.weight, style.style, true);
+  // The combined stylesheet already carries every face, so no per-style link is injected.
+  const status = useFontReady(family, style.weight, style.style, true, { sheet });
   return (
     <li className="flex flex-col gap-3 border-b border-rule py-5 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0 flex-1">
@@ -89,7 +92,7 @@ export default function DetailPreview({
 
   // Loads every style of the family in one stylesheet.
   const sheet = useFontStylesheet(cssUrl(family, styles));
-  const heroStatus = useFontReady(family, previewWeight, previewStyle, true);
+  const heroStatus = useFontReady(family, previewWeight, previewStyle, true, { sheet });
 
   const text = state.text.trim() === "" ? family : state.text;
   const rowSize = Math.min(state.size, ROW_MAX_SIZE);
@@ -169,6 +172,7 @@ export default function DetailPreview({
               size={rowSize}
               isVariable={isVariable}
               axesText={axesText}
+              sheet={sheet}
             />
           ))}
         </ol>

@@ -34,4 +34,21 @@ test.describe("compare", () => {
     await expectFontSize(fontA.getByText(custom, { exact: true }), 72);
     await expectFontSize(fontB.getByText(custom, { exact: true }), 72);
   });
+  test("the font picker lists results only while searching, and closes after a pick", async ({ page }) => {
+    await page.goto("/compare?a=inter&b=playfair-display");
+    const fontA = page.getByRole("region", { name: "Font A", exact: true });
+    const pickerA = page.getByRole("textbox", { name: "Font A", exact: true });
+    const resultsA = page.getByRole("list", { name: "Font A results" });
+
+    await expect(pickerA).toBeVisible();
+    await expect(resultsA).toHaveCount(0);
+
+    await pickerA.fill("roboto");
+    await expect(resultsA).toBeVisible();
+    await resultsA.getByRole("button").first().click();
+
+    await expect(fontA.getByRole("heading", { name: "Roboto", exact: true })).toBeVisible();
+    await expect(pickerA).toHaveValue("");
+    await expect(resultsA).toHaveCount(0);
+  });
 });

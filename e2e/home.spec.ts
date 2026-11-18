@@ -9,6 +9,16 @@ test.describe("home", () => {
     await expect(page.getByRole("heading", { level: 1, name: "Find your type." })).toBeVisible();
   });
 
+  test("clicking Browse from /?q=x clears the stale search", async ({ page }) => {
+    await page.goto("/?q=inter");
+    const search = page.getByRole("searchbox", { name: "Search fonts", exact: true });
+    await expect(search).toHaveValue("inter");
+
+    await page.getByRole("link", { name: "Browse", exact: true }).click();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(search).toHaveValue("");
+  });
+
   test("searching 'inter' shows the Inter card", async ({ page }) => {
     await page.goto("/");
     await page.getByLabel("Search fonts", { exact: true }).fill("inter");
