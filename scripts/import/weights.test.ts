@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { parseMetadata } from "./parse-metadata";
-import { familyWeights, previewFor, styleCountFor } from "./weights";
+import { familyWeights, previewFor } from "./weights";
 
 const fixture = (name: string) =>
   readFileSync(fileURLToPath(new URL(`./__fixtures__/${name}`, import.meta.url)), "utf8");
@@ -48,19 +48,5 @@ describe("previewFor", () => {
 
   it("uses italic only when no normal style exists", () => {
     expect(previewFor({ styles: [file("italic", 400)], weights: [400] })).toEqual({ previewWeight: 400, previewStyle: "italic" });
-  });
-});
-
-describe("styleCountFor", () => {
-  it("counts weight x (normal + italic) for variable fonts", () => {
-    expect(styleCountFor({ isVariable: true, weights: ALL, styles: [file("normal", 400), file("italic", 400)] })).toBe(18);
-  });
-
-  it("counts weight x normal only when there is no italic file", () => {
-    expect(styleCountFor({ isVariable: true, weights: ALL, styles: [file("normal", 400)] })).toBe(9);
-  });
-
-  it("counts real files for static fonts", () => {
-    expect(styleCountFor({ isVariable: false, weights: [300, 400], styles: [file("normal", 300), file("normal", 400), file("italic", 400)] })).toBe(3);
   });
 });

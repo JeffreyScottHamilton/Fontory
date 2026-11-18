@@ -1,11 +1,11 @@
-// Builds data/fonts.json, public/data/index.json and data/import-report.json from the
-// google/fonts checkout. Usage: tsx scripts/import/build.ts [--src <dir>]
+// Builds data/fonts.json and data/import-report.json from the google/fonts checkout.
+// Usage: tsx scripts/import/build.ts [--src <dir>]
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseMetadata, type Metadata } from "./parse-metadata";
 import { categoriesFromTags, familyTagRows, keptTags, parseFamiliesCsv, RETRO_TAG, RETRO_TAG_MIN_SCORE } from "./tags";
-import { familyWeights, previewFor, styleCountFor } from "./weights";
-import { CATEGORIES, type CategoryEvidence, type CategoryId, type FontFamily, type FontIndexEntry, type FontStyle } from "../../src/lib/types";
+import { familyWeights } from "./weights";
+import { CATEGORIES, type CategoryEvidence, type CategoryId, type FontFamily, type FontStyle } from "../../src/lib/types";
 
 const ROOT = path.resolve(__dirname, "../..");
 const SOURCES = JSON.parse(readFileSync(path.join(__dirname, "sources.json"), "utf8")) as {
@@ -15,7 +15,6 @@ const SOURCES = JSON.parse(readFileSync(path.join(__dirname, "sources.json"), "u
 const SHA = SOURCES.googleFonts.commit;
 const RAW_BASE = `https://raw.githubusercontent.com/google/fonts/${SHA}`;
 const DATA_DIR = path.join(ROOT, "data");
-const PUBLIC_DATA_DIR = path.join(ROOT, "public", "data");
 const VERIFY_REPORT = path.join(DATA_DIR, "verify-report.json");
 
 const LICENSES: Record<string, { file: string; name: string }> = {
@@ -36,7 +35,7 @@ const REPORT_NOTES = [
   `Category tags: ${RETRO_TAG} maps to retro only at score >= ${RETRO_TAG_MIN_SCORE}; other category tags need score >= 50 (see tags.ts).`,
   "IBM/plex coverage also counts googlefonts/plex, the Google Fonts fork of IBM/plex (see sources.json aliases).",
   "fontsource/fontsource is a dedupe-only mirror of Google Fonts: nothing is imported from it.",
-  "Variable fonts: weights span every standard weight inside the wght axis; styles remain the real files; styleCount = weights x (normal+italic).",
+  "Variable fonts: styles are real font files; variable fonts list every standard weight within the wght axis.",
 ];
 
 export interface Excluded { repoPath: string; reason: string }
@@ -60,6 +59,31 @@ export function normalizeRepo(url: string): string {
 }
 
 const sortStr = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
+
+// Dedupe: first candidate wins on slug or family-name collision. Pure; kept families keep input order.
+export function dedupe(candidates: FontFamily[]): { kept: FontFamily[]; duplicates: Duplicate[] } {
+  const duplicates: Duplicate[] = [];
+  const bySlug = new Map<string, FontFamily>();
+  const byName = new Map<string, FontFamily>();
+  const kept: FontFamily[] = [];
+  for (const f of candidates) {
+    const clash = bySlug.get(f.slug) ?? byName.get(f.family);
+    if (clash) {
+      duplicates.push({
+        repoPath: f.repoPath,
+        family: f.family,
+        slug: f.slug,
+        keptRepoPath: clash.repoPath,
+        reason: byName.get(f.family) ? "duplicate family name" : "slug collision",
+      });
+      continue;
+    }
+    bySlug.set(f.slug, f);
+    byName.set(f.family, f);
+    kept.push(f);
+  }
+  return { kept, duplicates };
+}
 
 function categoryOrder(ids: Iterable<CategoryId>): CategoryId[] {
   const set = new Set(ids);
@@ -233,33 +257,20 @@ function main(): void {
   }
 
   const duplicates: Duplicate[] = [];
-  // Dedupe: first by repoPath wins on slug or family-name collision.
   for (const d of styleDrops) {
     const f = candidates.find((c) => c.repoPath === d.repoPath)!;
     duplicates.push({ repoPath: d.repoPath, family: f.family, slug: f.slug, keptRepoPath: d.repoPath, reason: `duplicate style/weight file dropped: ${d.file}` });
   }
-  const bySlug = new Map<string, FontFamily>();
-  const byName = new Map<string, FontFamily>();
-  let kept: FontFamily[] = [];
-  for (const f of candidates) {
-    const clash = bySlug.get(f.slug) ?? byName.get(f.family);
-    if (clash) {
-      duplicates.push({
-        repoPath: f.repoPath,
-        family: f.family,
-        slug: f.slug,
-        keptRepoPath: clash.repoPath,
-        reason: byName.get(f.family) ? "duplicate family name" : "slug collision",
-      });
-      continue;
-    }
-    bySlug.set(f.slug, f);
-    byName.set(f.family, f);
-    kept.push(f);
-  }
+  const deduped = dedupe(candidates);
+  duplicates.push(...deduped.duplicates);
+  let kept = deduped.kept;
 
-  // Verify exclusions (from a previous `import:verify` run).
-  const verify = readJsonIfExists<{ failedFamilies: { family: string; reason: string }[]; upstreamLicenses: UpstreamLicense[] }>(VERIFY_REPORT);
+  // Verify exclusions (from a previous `import:verify` run). Only a report for the pinned commit applies.
+  const verifyRaw = readJsonIfExists<{ commit?: string; failedFamilies: { family: string; reason: string }[]; upstreamLicenses: UpstreamLicense[] }>(VERIFY_REPORT);
+  const verify = verifyRaw && verifyRaw.commit === SHA ? verifyRaw : null;
+  if (verifyRaw && !verify) {
+    console.warn(`BUILD: WARNING ignoring ${VERIFY_REPORT}: it was verified at commit ${verifyRaw.commit ?? "(none)"}, pinned commit is ${SHA}; re-run npm run import:verify`);
+  }
   if (verify) {
     const failed = new Map(verify.failedFamilies.map((f) => [f.family, f.reason]));
     kept = kept.filter((f) => {
@@ -275,23 +286,6 @@ function main(): void {
   for (const f of kept) f.related = related.get(f.slug) ?? [];
   excluded.sort((a, b) => sortStr(a.repoPath, b.repoPath));
   duplicates.sort((a, b) => sortStr(a.repoPath, b.repoPath));
-
-  const index: FontIndexEntry[] = kept.map((f) => {
-    const preview = previewFor(f);
-    return {
-      slug: f.slug,
-      family: f.family,
-      designer: f.designer,
-      categories: f.categories,
-      weights: f.weights,
-      hasItalic: f.hasItalic,
-      isVariable: f.isVariable,
-      styleCount: styleCountFor(f),
-      dateAdded: f.dateAdded,
-      previewWeight: preview.previewWeight,
-      previewStyle: preview.previewStyle,
-    };
-  });
 
   // Upstream coverage and license checks.
   const upstreams = SOURCES.upstreams.map((u) => {
@@ -332,9 +326,7 @@ function main(): void {
   };
 
   mkdirSync(DATA_DIR, { recursive: true });
-  mkdirSync(PUBLIC_DATA_DIR, { recursive: true });
   writeFileSync(path.join(DATA_DIR, "fonts.json"), JSON.stringify(kept) + "\n");
-  writeFileSync(path.join(PUBLIC_DATA_DIR, "index.json"), JSON.stringify(index) + "\n");
   writeFileSync(path.join(DATA_DIR, "import-report.json"), JSON.stringify(report, null, 2) + "\n");
 
   console.log(`BUILD: families=${kept.length} styles=${report.totals.styles} excluded=${excluded.length} duplicates=${duplicates.length} verifyApplied=${verify !== null}`);

@@ -24,11 +24,3 @@ export function previewFor(f: { styles: Pick<FontStyle, "style">[]; weights: num
     : [...f.weights].sort((a, b) => Math.abs(a - 400) - Math.abs(b - 400) || a - b)[0];
   return { previewWeight, previewStyle };
 }
-
-// Index styleCount: variable fonts count weight x (normal + italic) combos; static fonts count files.
-export function styleCountFor(f: { isVariable: boolean; weights: number[]; styles: Pick<FontStyle, "style">[] }): number {
-  if (!f.isVariable) return f.styles.length;
-  const hasNormal = f.styles.some((s) => s.style === "normal") ? 1 : 0;
-  const hasItalic = f.styles.some((s) => s.style === "italic") ? 1 : 0;
-  return f.weights.length * (hasNormal + hasItalic);
-}

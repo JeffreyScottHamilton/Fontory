@@ -24,9 +24,11 @@ const UPSTREAM_BRANCHES = ["main", "master"];
 
 interface UpstreamLicense { repo: string; branch: string | null; file: string | null; firstLine: string | null }
 
-function curl(args: string[]): Promise<Buffer> {
+// Every request is HTTPS-only, and "--" ends option parsing so the URL is never read as a flag.
+function curl(opts: string[], url: string): Promise<Buffer> {
+  const argv = ["-sS", "--proto", "=https", "--retry", "2", "--max-time", "60", ...opts, "--", url];
   return new Promise((resolve, reject) => {
-    execFile("curl", ["-sS", "--retry", "2", "--max-time", "60", ...args], { encoding: "buffer", maxBuffer: 64 * 1024 * 1024 }, (err, stdout, stderr) => {
+    execFile("curl", argv, { encoding: "buffer", maxBuffer: 64 * 1024 * 1024 }, (err, stdout, stderr) => {
       if (err) reject(new Error(`curl failed: ${String(stderr).trim() || err.message}`));
       else resolve(stdout as Buffer);
     });
@@ -35,7 +37,7 @@ function curl(args: string[]): Promise<Buffer> {
 
 // GET returning body text and HTTP status.
 async function getText(url: string): Promise<{ code: number; body: string }> {
-  const out = await curl(["-w", "\n%{http_code}", url]);
+  const out = await curl(["-w", "\n%{http_code}"], url);
   const s = out.toString("utf8");
   const idx = s.lastIndexOf("\n");
   return { code: Number(s.slice(idx + 1)), body: s.slice(0, idx) };
@@ -43,12 +45,12 @@ async function getText(url: string): Promise<{ code: number; body: string }> {
 
 // First 4 bytes via a range request; returns hex of what was received.
 async function magicHex(url: string): Promise<string> {
-  const out = await curl(["-r", "0-3", "-o", "-", url]);
+  const out = await curl(["-r", "0-3", "-o", "-"], url);
   return out.subarray(0, 4).toString("hex");
 }
 
 async function statusOf(url: string): Promise<number> {
-  const out = await curl(["-o", "/dev/null", "-w", "%{http_code}", url]);
+  const out = await curl(["-o", "/dev/null", "-w", "%{http_code}"], url);
   return Number(out.toString("utf8"));
 }
 
